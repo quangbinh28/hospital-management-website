@@ -1,0 +1,50 @@
+<h2 class="mb-4 text-primary">➕ Thêm hồ sơ bệnh án mới</h2>
+
+<!-- Thông tin bệnh nhân -->
+<div class="card mb-4">
+  <div class="card-header bg-info text-white">🧍‍♂️ Thông tin bệnh nhân</div>
+  <div class="card-body row">
+    <div class="col-md-4"><strong>Mã BN:</strong> <?= htmlspecialchars($benhNhan['MaBN']) ?></div>
+    <div class="col-md-4"><strong>Họ tên:</strong> <?= htmlspecialchars($benhNhan['HoTen']) ?></div>
+    <div class="col-md-4"><strong>Ngày sinh:</strong> <?= htmlspecialchars($benhNhan['NgaySinh']) ?></div>
+    <div class="col-md-4"><strong>Giới tính:</strong> <?= $benhNhan['GioiTinh'] == 'M' ? 'Nam' : 'Nữ' ?></div>
+    <div class="col-md-8"><strong>Địa chỉ:</strong> <?= htmlspecialchars($benhNhan['DiaChi']) ?></div>
+  </div>
+</div>
+
+<!-- Form thêm hồ sơ -->
+<form action="index.php?controller=hoso&action=luu" method="post" class="row g-3">
+    <input type="hidden" name="ma_bn" value="<?= $benhNhan['MaBN'] ?>">
+
+    <div class="col-md-6">
+        <label class="form-label">Chẩn đoán ban đầu:</label>
+        <input type="text" class="form-control" name="chan_doan" required>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Tình trạng nhập viện:</label>
+        <input type="text" class="form-control" name="tinh_trang" required>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Ngày nhập viện:</label>
+        <input type="date" class="form-control" name="ngay_nhap" required>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Ngày ra viện:</label>
+        <input type="date" class="form-control" name="ngay_ra">
+    </div>
+
+    <div class="col-md-12">
+        <label class="form-label">Ghi chú:</label>
+        <textarea name="ghi_chu" rows="3" class="form-control"></textarea>
+    </div>
+
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-success">💾 Thêm hồ sơ</button>
+        <a href="index.php?controller=benhnhan&action=chitiet&id=<?= $benhNhan['MaBN'] ?>" class="btn btn-secondary">↩️ Quay lại</a>
+    </div>
+</form>
+
+<?php include 'views/partials/footer.php'; ?>
