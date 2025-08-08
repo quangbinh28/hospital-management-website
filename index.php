@@ -1,33 +1,41 @@
 <?php
 session_start();
 
-$controller = $_GET['controller'] ?? 'benhnhan';
-$action     = $_GET['action'] ?? 'timkiempage';
+// Lấy controller và action từ URL, mặc định vào tìm kiếm bệnh nhân
+$controller = strtolower($_GET['controller'] ?? 'benhnhan');
+$action     = strtolower($_GET['action'] ?? 'timkiempage');
 
 switch ($controller) {
-    // case 'trangchu':
-    //     require_once 'controllers/TrangChuController.php';
-    //     $ctrl = new TrangChuController();
-    //     $ctrl->index();
-    //     break;
+    case 'trangchu':
+        require_once 'controllers/TrangChuController.php';
+        $ctrl = new TrangChuController();
 
-    // case 'xacthuc':
-    //     require_once 'controllers/XacThucController.php';
-    //     $ctrl = new XacThucController();
-    //     if ($action === 'dangnhap') {
-    //         $ctrl->dangNhap();
-    //     } elseif ($action === 'xulydangnhap') {
-    //         $ctrl->xuLyDangNhap();
-    //     } elseif ($action === 'dangxuat') {
-    //         $ctrl->dangXuat();
-    //     } else {
-    //         echo "Không tìm thấy hành động trong XacThucController";
-    //     }
-    //     break;
+        if ($action === 'index') {
+            $ctrl->index();
+        } else {
+            echo "❌ Không tìm thấy action [$action] trong TrangChuController";
+        }
+        break;
+
+    case 'xacthuc':
+        require_once 'controllers/XacThucController.php';
+        $ctrl = new XacThucController();
+
+        if ($action === 'dangnhap') {
+            $ctrl->dangNhap();
+        } elseif ($action === 'xulydangnhap') {
+            $ctrl->xuLyDangNhap();
+        } elseif ($action === 'dangxuat') {
+            $ctrl->dangXuat();
+        } else {
+            echo "❌ Không tìm thấy action [$action] trong XacThucController";
+        }
+        break;
 
     case 'benhnhan':
         require_once 'controllers/BenhNhanController.php';
         $ctrl = new BenhNhanController();
+
         if ($action === 'timkiem') {
             $ctrl->timKiem();
         } elseif ($action === 'timkiempage') {
@@ -35,7 +43,7 @@ switch ($controller) {
         } elseif ($action === 'chitiet' && isset($_GET['id'])) {
             $ctrl->chiTiet($_GET['id']);
         } else {
-            echo "Không tìm thấy hành động trong BenhNhanController";
+            echo "❌ Không tìm thấy action [$action] trong BenhNhanController";
         }
         break;
 
@@ -54,11 +62,24 @@ switch ($controller) {
         } elseif ($action === 'chitiet' && isset($_GET['maHS'])) {
             $ctrl->chiTiet($_GET['maHS']);
         } else {
-            echo "Không tìm thấy action phù hợp trong HoSoBenhAnController";
+            echo "❌ Không tìm thấy action [$action] trong HoSoBenhAnController";
+        }
+        break;
+
+    case 'donthuoc':
+        require_once 'controllers/DonThuocController.php';
+        $ctrl = new DonThuocController();
+
+        if ($action === 'taopage') {
+            $ctrl->taoPage();
+        } elseif ($action === 'luu') {
+            $ctrl->luu();
+        } else {
+            echo "❌ Không tìm thấy action [$action] trong DonThuocController";
         }
         break;
 
     default:
-        echo "Không tìm thấy controller: $controller";
+        echo "❌ Không tìm thấy controller [$controller]";
         break;
 }
