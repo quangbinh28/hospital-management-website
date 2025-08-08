@@ -9,8 +9,11 @@
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'hoso' ? ' active' : '' ?>" 
        href="index.php?controller=hoso&action=them">📝 Thêm hồ sơ</a>
 
-    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' ? ' active' : '' ?>" 
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'taopage' ? ' active' : '' ?>" 
        href="index.php?controller=donthuoc&action=taopage">💊 Tạo đơn thuốc</a>
+
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'tracuu' ? ' active' : '' ?>" 
+       href="index.php?controller=donthuoc&action=tracuu">📄 Tra cứu đơn thuốc</a>
 
     <?php if (!empty($_SESSION['IsLogined']) && $_SESSION['IsLogined'] === true): ?>
       <div class="d-flex ms-auto">
