@@ -9,7 +9,12 @@ class DonThuocController {
     }
 
     public function taoPage() {
-        $VIEW = './views/Thuoc/Thuoc_TaoDonThuoc.php';
+        $VIEW = './views/Thuoc/DonThuoc_Tao.php';
+        include './template/Template.php';
+    }
+
+    public function traCuuPage() {
+        $VIEW = './views/Thuoc/DonThuoc_TraCuu.php';
         include './template/Template.php';
     }
 
@@ -26,5 +31,34 @@ class DonThuocController {
 
         $maDT = $this->model->taoDonThuoc($maBN, $chanDoan, $ghiChu, $thuocList);
         echo "<div class='alert alert-success'>Đơn thuốc #$maDT đã được tạo thành công.</div>";
+    }
+
+    public function timKiem() {
+        $maDT   = $_POST['maDT'] ?? '';
+        $tenBN  = $_POST['tenBN'] ?? '';
+        $ngayLap = $_POST['ngayLap'] ?? '';
+        $page   = $_POST['page'] ?? 1;
+
+        $result = $this->model->timKiemDonThuoc($maDT, $tenBN, $ngayLap, $page);
+        $donThuocList = $result['data'];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            include './views/DonThuoc/DonThuoc_KetQua.php';
+        } else {
+            $VIEW = './views/DonThuoc/DonThuoc_TraCuu.php';
+            include './template/Template.php';
+        }
+    }
+
+    public function chiTiet() {
+        $maDT = $_GET['maDT'] ?? '';
+        if (!$maDT) {
+            echo "<div class='alert alert-danger'>Mã đơn thuốc không hợp lệ.</div>";
+            return;
+        }
+
+        $donThuoc = $this->model->layChiTietDonThuoc($maDT);
+        $VIEW = './views/DonThuoc/DonThuoc_ChiTiet.php';
+        include './template/Template.php';
     }
 }
