@@ -13,7 +13,7 @@
        href="index.php?controller=donthuoc&action=taopage">💊 Tạo đơn thuốc</a>
 
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'tracuu' ? ' active' : '' ?>" 
-       href="index.php?controller=donthuoc&action=tracuu">📄 Tra cứu đơn thuốc</a>
+       href="index.php?controller=donthuoc&action=tracuupage">📄 Tra cứu đơn thuốc</a>
 
     <?php if (!empty($_SESSION['IsLogined']) && $_SESSION['IsLogined'] === true): ?>
       <div class="d-flex ms-auto">

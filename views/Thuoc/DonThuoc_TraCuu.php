@@ -1,6 +1,6 @@
 <h2 class="text-primary mb-4">💊 Tra cứu đơn thuốc</h2>
 
-<form id="searchDonThuocForm" class="row g-3 mb-4" method="post" action="index.php?controller=donthuoc&action=timkiem">
+<form id="searchDonThuocForm" class="row g-3 mb-4" method="post" action="index.php?controller=donthuoc&action=tracuu">
     <div class="col-md-4">
         <label for="maDT" class="form-label">Mã đơn thuốc:</label>
         <input type="text" id="maDT" name="maDT" class="form-control">

@@ -19,7 +19,6 @@
                 <tr>
                     <th>Tên thuốc</th>
                     <th>Số lượng</th>
-                    <th>Liều lượng</th>
                     <th>Chỉ định</th>
                     <th></th>
                 </tr>
@@ -28,7 +27,6 @@
                 <tr>
                     <td><input type="text" name="thuoc[0][ten]" class="form-control" required></td>
                     <td><input type="number" name="thuoc[0][soLuong]" class="form-control" required></td>
-                    <td><input type="text" name="thuoc[0][lieuLuong]" class="form-control"></td>
                     <td><input type="text" name="thuoc[0][chiDinh]" class="form-control"></td>
                     <td class="text-center">
                         <button type="button" class="btn btn-danger btn-sm xoaThuoc">🗑</button>

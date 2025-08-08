@@ -77,9 +77,9 @@ switch ($controller) {
         } elseif ($action === 'tracuupage') {
             $ctrl->traCuuPage();
         } elseif ($action === 'tracuu') {
-            $ctrl->traCuu();
-        } elseif ($action === 'chitiet' && isset($_GET['id'])) {
-            $ctrl->chiTiet($_GET['id']);
+            $ctrl->timKiem();
+        } elseif ($action === 'chitiet' && isset($_GET['maDT'])) {
+            $ctrl->chiTiet($_GET['maDT']);
         } else {
             echo "❌ Không tìm thấy action [$action] trong DonThuocController";
         }
