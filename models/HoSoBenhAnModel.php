@@ -35,7 +35,17 @@ class HoSoBenhAnModel {
      * Lấy thông tin bệnh nhân (phục vụ hiển thị hồ sơ)
      */
     public function getBenhNhanById($maBN) {
+        return 
 
+                [
+                    'MaBN' => 'BN001',
+                    'cmnd' => '012356744',
+                    'HoTenBN' => 'NVA',
+                    'GioiTinhBN' => 'Nam',
+                    'NgaySinhBN' => '0123567',
+                    'DiaChi' => 'a@gmail.com'
+                ]
+                ;
     }
 
     /**

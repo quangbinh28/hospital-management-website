@@ -5,9 +5,9 @@
 
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'benhnhan' ? ' active' : '' ?>" 
        href="index.php?controller=benhnhan&action=timkiempage">🔍 Tra cứu bệnh nhân</a>
-
-    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'hoso' ? ' active' : '' ?>" 
-       href="index.php?controller=hoso&action=them">📝 Thêm hồ sơ</a>
+    
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'tracuu' ? ' active' : '' ?>" 
+       href="index.php?controller=benhnhan&action=thempage">📄 Thêm bệnh nhân</a>
 
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'taopage' ? ' active' : '' ?>" 
        href="index.php?controller=donthuoc&action=taopage">💊 Tạo đơn thuốc</a>

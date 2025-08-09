@@ -42,6 +42,10 @@ switch ($controller) {
             $ctrl->timKiemPage();
         } elseif ($action === 'chitiet' && isset($_GET['id'])) {
             $ctrl->chiTiet($_GET['id']);
+        } elseif ($action === 'thempage') {
+            $ctrl->themPage();
+        } elseif ($action === 'them') {
+            $ctrl->them();
         } else {
             echo "❌ Không tìm thấy action [$action] trong BenhNhanController";
         }

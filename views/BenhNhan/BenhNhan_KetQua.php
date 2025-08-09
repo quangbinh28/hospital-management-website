@@ -19,8 +19,11 @@
                     <td><?= htmlspecialchars($bn['GioiTinhBN']) ?></td>
                     <td><?= htmlspecialchars($bn['EmailBN']) ?></td>
                     <td>
-                        <a href="index.php?controller=patient&action=detail&id=<?= $bn['MaBN'] ?>" class="btn btn-sm btn-info">
+                        <a href="index.php?controller=benhnhan&action=chitiet&id=<?= $bn['MaBN'] ?>" class="btn btn-sm btn-info">
                             Xem
+                        </a>
+                        <a href="index.php?controller=hoso&action=them&maBN=<?= $bn['MaBN'] ?>" class="btn btn-sm btn-info">
+                            Thêm bệnh án
                         </a>
                     </td>
                 </tr>
