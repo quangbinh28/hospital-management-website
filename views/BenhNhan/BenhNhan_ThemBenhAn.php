@@ -19,27 +19,17 @@
 
         <div class="col-md-6">
             <label class="form-label">Chẩn đoán ban đầu:</label>
-            <input type="text" class="form-control" name="chan_doan" required>
+            <input type="text" class="form-control" name="ChanDoanBanDau" required>
         </div>
 
         <div class="col-md-6">
-            <label class="form-label">Tình trạng nhập viện:</label>
-            <input type="text" class="form-control" name="tinh_trang" required>
+            <label class="form-label">Triệu chứng:</label>
+            <input type="text" class="form-control" name="TrieuChung" required>
         </div>
-
-        <div class="col-md-6">
-            <label class="form-label">Ngày nhập viện:</label>
-            <input type="date" class="form-control" name="ngay_nhap" required>
-        </div>
-
-        <div class="col-md-6">
-            <label class="form-label">Ngày ra viện:</label>
-            <input type="date" class="form-control" name="ngay_ra">
-        </div>
-
+        
         <div class="col-12">
-            <label class="form-label">Ghi chú:</label>
-            <textarea name="ghi_chu" rows="3" class="form-control"></textarea>
+            <label class="form-label">Ghi chú điều trị:</label>
+            <textarea name="GhiChu" rows="3" class="form-control"></textarea>
         </div>
 
         <div class="col-12 text-end">

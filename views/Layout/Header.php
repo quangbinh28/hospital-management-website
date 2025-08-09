@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand<?= ($_GET['controller'] ?? '') === 'trangchu' ? ' active' : '' ?>" 
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'trangchu' ? ' active' : '' ?>" 
        href="index.php?controller=trangchu&action=index">🏥 Trang chủ</a>
 
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'benhnhan' ? ' active' : '' ?>" 

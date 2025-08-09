@@ -28,17 +28,16 @@ class HoSoBenhAnController {
      */
     public function luu() {
         $data = [
-            'MaBN' => $_POST['ma_bn'],
-            'ChanDoanBanDau' => $_POST['chan_doan'],
-            'TinhTrangNhapVien' => $_POST['tinh_trang'],
-            'NgayNhapVien' => $_POST['ngay_nhap'],
-            'NgayRaVien' => $_POST['ngay_ra'] ?? null,
-            'GhiChu' => $_POST['ghi_chu'],
+            'MaBN' => $_POST['MaBN'],
+            'ChanDoanBanDau' => $_POST['ChanDoanBanDau'],
+            'TrieuChung' => $_POST['TrieuChung'],
+            'GhiChu' => $_POST['GhiChu'],
+            'MaBS' => $_SESSION['MaTaiKhoan'],
         ];
 
         $this->model->insertHoSo($data);
 
-        header('Location: index.php?controller=benhnhan&action=chitiet&id=' . $_POST['ma_bn']);
+        header('Location: index.php?controller=benhnhan&action=chitiet&id=' . $_POST['MaBN']);
     }
 
     /**
