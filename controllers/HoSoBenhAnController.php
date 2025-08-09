@@ -73,7 +73,7 @@ class HoSoBenhAnController {
     }
 
     /**
-     * Xem chi tiết 1 hồ sơ bệnh án cụ thể (tuỳ chọn)
+     * Xem chi tiết 1 hồ sơ bệnh án cụ thể
      */
     public function chiTiet($maHS) {
         $hoso = $this->model->getHoSoById($maHS);
