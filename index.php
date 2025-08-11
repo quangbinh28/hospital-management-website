@@ -89,6 +89,16 @@ switch ($controller) {
         }
         break;
 
+    case 'lichkham':
+        require_once 'controllers/LichKhamController.php';
+        $ctrl = new LichKhamController();
+
+        if ($action === 'datlichpage') {
+            $ctrl->datLichPage();
+        } elseif ($action === '') {
+
+        }
+        break;
     default:
         echo "❌ Không tìm thấy controller [$controller]";
         break;

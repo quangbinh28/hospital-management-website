@@ -6,14 +6,17 @@
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'benhnhan' ? ' active' : '' ?>" 
        href="index.php?controller=benhnhan&action=timkiempage">🔍 Tra cứu bệnh nhân</a>
     
-    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'tracuu' ? ' active' : '' ?>" 
-       href="index.php?controller=benhnhan&action=thempage">📄 Thêm bệnh nhân</a>
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'benhnhan' && ($_GET['action'] ?? '') === 'thempage' ? ' active' : '' ?>" 
+       href="index.php?controller=benhnhan&action=thempage">➕ Thêm bệnh nhân</a>
 
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'taopage' ? ' active' : '' ?>" 
        href="index.php?controller=donthuoc&action=taopage">💊 Tạo đơn thuốc</a>
 
-    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'tracuu' ? ' active' : '' ?>" 
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'donthuoc' && ($_GET['action'] ?? '') === 'tracuupage' ? ' active' : '' ?>" 
        href="index.php?controller=donthuoc&action=tracuupage">📄 Tra cứu đơn thuốc</a>
+
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'datlichpage' ? ' active' : '' ?>" 
+       href="index.php?controller=lichkham&action=datlichpage">📅 Đặt lịch khám</a>
 
     <?php if (!empty($_SESSION['IsLogined']) && $_SESSION['IsLogined'] === true): ?>
       <div class="d-flex ms-auto">
