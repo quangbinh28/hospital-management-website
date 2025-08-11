@@ -19,7 +19,7 @@ class LichKhamModel {
         return [];
     }
 
-    public function datLichKham($maBS, $ngay, $gio, $nguoiDK) {
+    public function datLichKham($maBS, $ngay, $gio, $nguyenNhan, $nguoiDK) {
         // TODO: Insert vào bảng Lịch Khám
         return true;
     }
