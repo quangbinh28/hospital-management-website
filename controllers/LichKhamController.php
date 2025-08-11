@@ -13,18 +13,23 @@ class LichKhamController {
      */
     public function datLichPage() {
         // Lấy danh sách chuyên khoa
-        $chuyenKhoaList = $this->model->layDanhSachChuyenKhoa();
+        $dsChuyenKhoa = $this->model->layDanhSachChuyenKhoa();
+
+        // Truyền dữ liệu ra view
         $VIEW = './views/LichKham/DatLichKham.php';
         include './template/Template.php';
     }
 
     /**
-     * Lấy danh sách bác sĩ theo khoa (AJAX)
+     * Lấy danh sách bác sĩ theo mã khoa (AJAX)
      */
     public function layBacSiTheoKhoa() {
         $maKhoa = $_POST['maKhoa'] ?? '';
         $bacSiList = $this->model->layDanhSachBacSiTheoKhoa($maKhoa);
-        include 'views/LichKham/ComboBox_BacSi.php';
+
+        // Có thể trả JSON nếu gọi bằng fetch()
+        header('Content-Type: application/json');
+        echo json_encode($bacSiList);
     }
 
     /**
@@ -33,27 +38,32 @@ class LichKhamController {
     public function layCaKhamTheoBacSi() {
         $maBS = $_POST['maBS'] ?? '';
         $caList = $this->model->layDanhSachCaKhamTheoBacSi($maBS);
-        include 'views/LichKham/DanhSachCa.php';
+
+        header('Content-Type: application/json');
+        echo json_encode($caList);
     }
 
     /**
      * Xử lý đặt lịch khám
      */
     public function datLichKham() {
-        $maBS    = $_POST['maBS'] ?? '';
-        $ngay    = $_POST['ngay'] ?? '';
-        $gio     = $_POST['gio'] ?? '';
-        $nguoiDK = $_SESSION['user_id'] ?? '';
+        $maBS        = $_POST['maBS'] ?? '';
+        $ngay        = $_POST['ngay'] ?? '';
+        $gio         = $_POST['gio'] ?? '';
+        $nguyenNhan  = $_POST['nguyen_nhan'] ?? '';
+        $nguoiDK     = $_SESSION['user_id'] ?? '';
 
-        $ketQua = $this->model->datLichKham($maBS, $ngay, $gio, $nguoiDK);
+        // Gọi model để lưu vào DB
+        $ketQua = $this->model->datLichKham($maBS, $ngay, $gio, $nguyenNhan, $nguoiDK);
 
         if ($ketQua) {
-            $thongBao = "Đặt lịch khám thành công!";
+            $thongBao = "✅ Đặt lịch khám thành công!";
         } else {
-            $thongBao = "Đặt lịch thất bại. Vui lòng thử lại!";
+            $thongBao = "❌ Đặt lịch thất bại. Vui lòng thử lại!";
         }
 
-        $chuyenKhoaList = $this->model->layDanhSachChuyenKhoa();
+        // Load lại trang đặt lịch với thông báo
+        $dsChuyenKhoa = $this->model->layDanhSachChuyenKhoa();
         $VIEW = './views/LichKham/DatLichKham.php';
         include './template/Template.php';
     }

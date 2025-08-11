@@ -1,8 +1,6 @@
 <?php
 
 class HoSoBenhAnModel {
-    private $conn;
-
     /**
      * Lấy danh sách tất cả hồ sơ bệnh án của một bệnh nhân
      */

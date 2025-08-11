@@ -26,8 +26,8 @@ class DonThuocModel {
             'NgayLap' => '2025-08-01',
             'TinhTrang' => 'Đã cấp',
             'Thuoc' => [
-                ['TenThuoc' => 'Paracetamol', 'SoLuong' => 10, 'LieuLuong' => '500mg', 'ChiDinh' => 'Giảm đau'],
-                ['TenThuoc' => 'Amoxicillin', 'SoLuong' => 20, 'LieuLuong' => '500mg', 'ChiDinh' => 'Kháng sinh']
+                ['TenThuoc' => 'Paracetamol', 'SoLuong' => 10, 'LieuLuong' => '500mg', 'ChiDinh' => '5 vien/ ngay'],
+                ['TenThuoc' => 'Amoxicillin', 'SoLuong' => 20, 'LieuLuong' => '500mg', 'ChiDinh' => '5 vien/ ngay']
             ]
         ];
     }

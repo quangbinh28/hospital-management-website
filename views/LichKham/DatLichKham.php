@@ -1,79 +1,94 @@
-<div class="container my-4" style="max-width: 700px;">
-    <h2 class="text-primary mb-4">📅 Đặt lịch khám</h2>
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">📅 Đặt Lịch Khám</h2>
 
-    <?php if (!empty($thongBao)): ?>
-        <div class="alert alert-info"><?= htmlspecialchars($thongBao) ?></div>
-    <?php endif; ?>
-
-    <form id="formDatLich" method="post" action="index.php?controller=LichKham&action=datLichKham" class="p-4 border rounded shadow-sm bg-light">
+    <form method="post" action="index.php?controller=lichkham&action=dat" class="border p-4 rounded shadow-sm bg-light">
         
         <!-- Chuyên khoa -->
         <div class="mb-3">
-            <label for="maKhoa" class="form-label">Chuyên khoa</label>
-            <select class="form-select" id="maKhoa" name="maKhoa" required>
+            <label for="chuyen_khoa" class="form-label">Chuyên khoa</label>
+            <select name="chuyen_khoa" id="chuyen_khoa" class="form-select" required>
                 <option value="">-- Chọn chuyên khoa --</option>
-                <?php foreach ($chuyenKhoaList as $ck): ?>
-                    <option value="<?= $ck['MaKhoa'] ?>"><?= htmlspecialchars($ck['TenKhoa']) ?></option>
+                <?php foreach ($dsChuyenKhoa as $ck): ?>
+                    <option value="<?= htmlspecialchars($ck['id']) ?>">
+                        <?= htmlspecialchars($ck['ten_chuyen_khoa']) ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
         </div>
 
         <!-- Bác sĩ -->
         <div class="mb-3">
-            <label class="form-label">Bác sĩ</label>
-            <div id="comboBacSi">
-                <select class="form-select" name="maBS" required>
-                    <option value="">-- Chọn bác sĩ --</option>
-                </select>
-            </div>
+            <label for="bac_si" class="form-label">Bác sĩ</label>
+            <select name="bac_si" id="bac_si" class="form-select" required>
+                <option value="">-- Chọn bác sĩ --</option>
+            </select>
         </div>
 
-        <!-- Ca khám -->
+        <!-- Ngày khám -->
         <div class="mb-3">
-            <label class="form-label">Ca khám</label>
-            <div id="danhSachCa">
-                <select class="form-select" name="gio" required>
-                    <option value="">-- Chọn ngày giờ --</option>
-                </select>
-            </div>
+            <label for="ngay_kham" class="form-label">Ngày khám</label>
+            <select name="ngay_kham" id="ngay_kham" class="form-select" required>
+                <option value="">-- Chọn ngày --</option>
+            </select>
         </div>
 
-        <!-- Nút đặt lịch -->
+        <!-- Giờ khám -->
+        <div class="mb-3">
+            <label for="gio_kham" class="form-label">Giờ khám</label>
+            <select name="gio_kham" id="gio_kham" class="form-select" required>
+                <option value="">-- Chọn giờ --</option>
+            </select>
+        </div>
+
+        <!-- Nguyên nhân -->
+        <div class="mb-3">
+            <label for="nguyen_nhan" class="form-label">Nguyên nhân khám</label>
+            <textarea name="nguyen_nhan" id="nguyen_nhan" rows="3" 
+                      class="form-control" placeholder="Nhập lý do bạn muốn khám..." required></textarea>
+        </div>
+
+        <!-- Nút -->
         <div class="text-end">
-            <button type="submit" class="btn btn-primary">✅ Đặt lịch khám</button>
+            <button type="submit" class="btn btn-primary">💾 Đặt lịch khám</button>
         </div>
     </form>
 </div>
 
+<!-- Script load danh sách bác sĩ và lịch -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const maKhoaSelect = document.getElementById('maKhoa');
-    const comboBacSiDiv = document.getElementById('comboBacSi');
-    const danhSachCaDiv = document.getElementById('danhSachCa');
+document.getElementById('chuyen_khoa').addEventListener('change', function () {
+    let idCK = this.value;
+    let bacSiSelect = document.getElementById('bac_si');
+    bacSiSelect.innerHTML = '<option value="">-- Đang tải bác sĩ --</option>';
 
-    maKhoaSelect.addEventListener('change', () => {
-        fetch('index.php?controller=LichKham&action=layBacSiTheoKhoa', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'maKhoa=' + encodeURIComponent(maKhoaSelect.value)
-        })
-        .then(res => res.text())
-        .then(html => {
-            comboBacSiDiv.innerHTML = html;
-            comboBacSiDiv.querySelector('select').addEventListener('change', loadCaKham);
+    fetch('index.php?controller=lichkham&action=layBacSiTheoChuyenKhoa&id=' + idCK)
+        .then(response => response.json())
+        .then(data => {
+            bacSiSelect.innerHTML = '<option value="">-- Chọn bác sĩ --</option>';
+            data.forEach(bacSi => {
+                bacSiSelect.innerHTML += `<option value="${bacSi.id}">${bacSi.ho_ten}</option>`;
+            });
         });
-    });
+});
 
-    function loadCaKham() {
-        fetch('index.php?controller=LichKham&action=layCaKhamTheoBacSi', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'maBS=' + encodeURIComponent(this.value)
-        })
-        .then(res => res.text())
-        .then(html => {
-            danhSachCaDiv.innerHTML = html;
+document.getElementById('bac_si').addEventListener('change', function () {
+    let idBS = this.value;
+
+    fetch('index.php?controller=lichkham&action=layLichBacSi&id=' + idBS)
+        .then(response => response.json())
+        .then(data => {
+            let ngaySelect = document.getElementById('ngay_kham');
+            let gioSelect = document.getElementById('gio_kham');
+
+            ngaySelect.innerHTML = '<option value="">-- Chọn ngày --</option>';
+            gioSelect.innerHTML = '<option value="">-- Chọn giờ --</option>';
+
+            data.ngay.forEach(ngay => {
+                ngaySelect.innerHTML += `<option value="${ngay}">${ngay}</option>`;
+            });
+            data.gio.forEach(gio => {
+                gioSelect.innerHTML += `<option value="${gio}">${gio}</option>`;
+            });
         });
-    }
 });
 </script>
