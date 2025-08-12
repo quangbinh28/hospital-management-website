@@ -8,44 +8,26 @@ class LichKhamController {
         $this->model = new LichKhamModel();
     }
 
-    /**
-     * Trang đặt lịch khám (hiển thị form ban đầu)
-     */
     public function datLichPage() {
-        // Lấy danh sách chuyên khoa
         $dsChuyenKhoa = $this->model->layDanhSachChuyenKhoa();
-
-        // Truyền dữ liệu ra view
         $VIEW = './views/LichKham/DatLichKham.php';
         include './template/Template.php';
     }
 
-    /**
-     * Lấy danh sách bác sĩ theo mã khoa (AJAX)
-     */
     public function layBacSiTheoKhoa() {
         $maKhoa = $_POST['maKhoa'] ?? '';
         $bacSiList = $this->model->layDanhSachBacSiTheoKhoa($maKhoa);
-
-        // Có thể trả JSON nếu gọi bằng fetch()
         header('Content-Type: application/json');
         echo json_encode($bacSiList);
     }
 
-    /**
-     * Lấy danh sách ca khám của bác sĩ (AJAX)
-     */
     public function layCaKhamTheoBacSi() {
         $maBS = $_POST['maBS'] ?? '';
         $caList = $this->model->layDanhSachCaKhamTheoBacSi($maBS);
-
         header('Content-Type: application/json');
         echo json_encode($caList);
     }
 
-    /**
-     * Xử lý đặt lịch khám
-     */
     public function datLichKham() {
         $maBS        = $_POST['maBS'] ?? '';
         $ngay        = $_POST['ngay'] ?? '';
@@ -53,18 +35,43 @@ class LichKhamController {
         $nguyenNhan  = $_POST['nguyen_nhan'] ?? '';
         $nguoiDK     = $_SESSION['user_id'] ?? '';
 
-        // Gọi model để lưu vào DB
         $ketQua = $this->model->datLichKham($maBS, $ngay, $gio, $nguyenNhan, $nguoiDK);
 
-        if ($ketQua) {
-            $thongBao = "✅ Đặt lịch khám thành công!";
-        } else {
-            $thongBao = "❌ Đặt lịch thất bại. Vui lòng thử lại!";
-        }
-
-        // Load lại trang đặt lịch với thông báo
+        $thongBao = $ketQua ? "✅ Đặt lịch khám thành công!" : "❌ Đặt lịch thất bại. Vui lòng thử lại!";
         $dsChuyenKhoa = $this->model->layDanhSachChuyenKhoa();
         $VIEW = './views/LichKham/DatLichKham.php';
         include './template/Template.php';
+    }
+
+    public function xacNhanLichPage() {
+        $ngay = $_GET['ngay'] ?? '';
+        $dsLichKham = $this->model->layLichKhamChuaXacNhan($ngay);
+        $VIEW = './views/LichKham/XacNhan.php';
+        include './template/Template.php';
+    }
+
+    public function locLichKhamTheoNgay() {
+        $ngay = $_GET['ngay'] ?? '';
+        $dsLichKham = $this->model->layLichKhamChuaXacNhan($ngay);
+        $VIEW = './views/LichKham/XacNhan.php';
+        include './template/Template.php';
+    }
+
+    public function xacNhanLich($maLich) {
+        if ($maLich) {
+            $this->model->capNhatTrangThaiLichKham($maLich, 'xac_nhan');
+            alert('Lịch Khám đã được xác nhận');
+        }
+        
+        exit();
+    }
+
+    public function huyLich($maLich) {
+        if ($maLich) {
+            $this->model->capNhatTrangThaiLichKham($maLich, 'huy');
+            alert('Hủy thành công');
+        }
+        
+        exit();
     }
 }

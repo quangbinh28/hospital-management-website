@@ -95,10 +95,26 @@ switch ($controller) {
 
         if ($action === 'datlichpage') {
             $ctrl->datLichPage();
-        } elseif ($action === '') {
-
+        } elseif ($action === 'laybacsitehokhoa') {
+            $ctrl->layBacSiTheoKhoa();
+        } elseif ($action === 'laycakhamtheobacsi') {
+            $ctrl->layCaKhamTheoBacSi();
+        } elseif ($action === 'datlichkham') {
+            $ctrl->datLichKham();
+        } elseif ($action === 'xacnhanpage') {
+            $ctrl->xacNhanLichPage();
+        } elseif ($action === 'loclichkhamtheongay') {
+            $ctrl->locLichKhamTheoNgay();
+        } elseif ($action === 'xacnhanlich' && isset($_POST['maLich'])) {
+            $ctrl->xacNhanLich($_POST['maLich']);
+        } elseif ($action === 'huylich' && isset($_POST['maLich'])) {
+            $ctrl->huyLich($_POST['maLich']);
+        } else {
+            echo "❌ Không tìm thấy action [$action] trong LichKhamController";
         }
         break;
+
+
     default:
         echo "❌ Không tìm thấy controller [$controller]";
         break;
