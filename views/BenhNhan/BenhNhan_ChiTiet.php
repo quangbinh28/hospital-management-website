@@ -34,10 +34,8 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Chẩn đoán ban đầu:</strong> <?= htmlspecialchars($hs['ChanDoanBanDau']) ?></p>
-                    <p><strong>Ngày tạo:</strong> <?= htmlspecialchars($hs['NgayTaoHS']) ?></p>
-                    <p><strong>Trạng thái nhập viện:</strong> <?= htmlspecialchars($hs['TinhTrangNhapVien']) ?></p>
-                    <p><strong>Ngày nhập viện:</strong> <?= htmlspecialchars($hs['NgayNhapVien']) ?></p>
-                    <p><strong>Ngày ra viện:</strong> <?= htmlspecialchars($hs['NgayRaVien']) ?></p>
+                    <p><strong>Triệu chứng:</strong> <?= htmlspecialchars($hs['TrieuChung']) ?></p>
+                    <p><strong>Ghi chú điều trị:</strong> <?= htmlspecialchars($hs['GhiChu']) ?></p>
 
                     <?php if (!empty($hs['KetQuaKham'])): ?>
                         <hr>
