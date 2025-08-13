@@ -109,6 +109,8 @@ switch ($controller) {
             $ctrl->xacNhanLich($_POST['maLich']);
         } elseif ($action === 'huylich' && isset($_POST['maLich'])) {
             $ctrl->huyLich($_POST['maLich']);
+        } elseif ($action === 'xem') {
+            $ctrl->xemLichKham();
         } else {
             echo "❌ Không tìm thấy action [$action] trong LichKhamController";
         }

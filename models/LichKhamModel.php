@@ -63,4 +63,22 @@ class LichKhamModel {
         // Hiện tại chưa lưu vào DB, chỉ mô phỏng thành công
         return true;
     }
+
+    public function layLichKhamDaXacNhan($maTaiKhoan, $tuNgay = null, $denNgay = null) {
+        // Dữ liệu mẫu
+        $data = [
+            ['NgayKham' => '2025-08-15', 'GioKham' => '08:00', 'BacSi' => 'Nguyễn Văn A', 'Phong' => '101'],
+            ['NgayKham' => '2025-08-18', 'GioKham' => '09:30', 'BacSi' => 'Trần Thị B', 'Phong' => '202'],
+            ['NgayKham' => '2025-08-20', 'GioKham' => '14:00', 'BacSi' => 'Phạm Văn C', 'Phong' => '303'],
+        ];
+
+        // Lọc theo ngày nếu có chọn
+        if ($tuNgay && $denNgay) {
+            $data = array_filter($data, function ($item) use ($tuNgay, $denNgay) {
+                return $item['NgayKham'] >= $tuNgay && $item['NgayKham'] <= $denNgay;
+            });
+        }
+
+        return $data;
+    }
 }
