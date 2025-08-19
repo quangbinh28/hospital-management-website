@@ -24,6 +24,9 @@
     <a class="nav-link<?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'xem' ? ' active' : '' ?>" 
        href="index.php?controller=lichkham&action=xem">📅 Xem lịch khám</a>
 
+    <a class="nav-link<?= ($_GET['controller'] ?? '') === 'bacsi' && ($_GET['action'] ?? '') === 'thempage' ? ' active' : '' ?>" 
+       href="index.php?controller=bacsi&action=thempage">📅 Thêm bác sĩ</a>
+
     <?php if (!empty($_SESSION['IsLogined']) && $_SESSION['IsLogined'] === true): ?>
       <div class="d-flex ms-auto">
         <span class="navbar-text me-3">

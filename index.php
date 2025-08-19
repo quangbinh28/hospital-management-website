@@ -115,6 +115,17 @@ switch ($controller) {
             echo "❌ Không tìm thấy action [$action] trong LichKhamController";
         }
         break;
+    case 'bacsi':
+        require_once 'controllers/BacSiController.php';
+        $ctrl = new BacSiController();
+        if ($action === 'thempage') {
+            $ctrl->themPage();
+        } elseif ($action === 'luu') {
+            $ctrl->luu();
+        } else {
+            echo "❌ Không tìm thấy action [$action] trong BacSiController";
+        }
+        break;
 
 
     default:
