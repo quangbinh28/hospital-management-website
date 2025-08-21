@@ -32,10 +32,10 @@
         <span class="navbar-text me-3">
           👨‍⚕️ Xin chào, <strong><?= htmlspecialchars($_SESSION['User']['full_name']) ?></strong>
         </span>
-        <a class="btn btn-outline-danger btn-sm" href="index.php?controller=xacthuc&action=dangxuat">Đăng xuất</a>
+        <a class="btn btn-outline-danger btn-sm" href="index.php?controller=auth&action=logout">Đăng xuất</a>
       </div>
     <?php else: ?>
-      <a class="btn btn-outline-primary btn-sm ms-auto" href="index.php?controller=xacthuc&action=dangnhap">Đăng nhập</a>
+      <a class="btn btn-outline-primary btn-sm ms-auto" href="index.php?controller=auth&action=loginpage">Đăng nhập</a>
     <?php endif; ?>
   </div>
 </nav>

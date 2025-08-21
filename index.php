@@ -126,8 +126,17 @@ switch ($controller) {
             echo "❌ Không tìm thấy action [$action] trong BacSiController";
         }
         break;
-
-
+    case 'auth':
+        require_once 'controllers/AuthController.php';
+        $ctrl = new AuthController();
+        if ($action === 'loginpage') {
+            $ctrl->loginPage();
+        } elseif ($action === 'login') {
+            $ctrl->handleLogin();
+        } elseif ($action === 'logout') {
+            $ctrl->logout();
+        }
+        break;
     default:
         echo "❌ Không tìm thấy controller [$controller]";
         break;
