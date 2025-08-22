@@ -1,6 +1,6 @@
 <h2 class="text-center mb-4">Login</h2>
 <div class="d-flex justify-content-center">
-    <form method="post" action="index.php?controller=auth&action=handleLogin" style="width: 300px;">
+    <form method="post" action="index.php?controller=auth&action=login" style="width: 300px;">
         <div class="mb-3">
             <label class="form-label">Username:</label>
             <input type="text" name="username" required class="form-control">

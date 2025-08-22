@@ -1,29 +1,19 @@
 <?php
-
-
 class UserModel {
     public function handleLogin($username, $password) {
-        // URL API (thay baseURL bằng giá trị thật)
         $url = "http://localhost:8080/api/v1/auth/login";
-
-        // Gắn query string (nếu API yêu cầu query param thay vì body)
         $url .= "?email=" . urlencode($username) . "&password=" . urlencode($password);
 
-        // Khởi tạo cURL
         $ch = curl_init();
-
-        // Thiết lập tùy chọn
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true); // POST method
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Content-Type: application/json"
         ]);
 
-        // Thực thi request
         $response = curl_exec($ch);
 
-        // Bắt lỗi nếu có
         if (curl_errno($ch)) {
             return [
                 "success" => false,
@@ -31,13 +21,39 @@ class UserModel {
             ];
         }
 
-        // Đóng kết nối
         curl_close($ch);
 
-        // Giải mã JSON response
         $data = json_decode($response, true);
 
-        return $data;
+        if ($data['accessToken'] != '') {
+            // Giải mã JWT payload
+            $payload = $this->decodeJwt($data['accessToken']);
+
+            // Lưu thông tin vào session
+            $_SESSION['accessToken']  = $data['accessToken'];
+            $_SESSION['refreshToken'] = $data['refreshToken'];
+            $_SESSION['user'] = $payload;
+            $_SESSION['IsLogined'] = true;
+
+            // ✅ chuyển hướng sang trang mong muốn
+            header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=benhnhan&action=timkiempage");
+            exit(); // quan trọng: dừng hẳn sau redirect
+        }
+
+        $_SESSION['IsLogined'] = false;
+        return [
+            "success" => false,
+            "error" => "Login failed"
+        ];
+    }
+
+    private function decodeJwt($jwt) {
+        $parts = explode('.', $jwt);
+        if (count($parts) !== 3) {
+            return null;
+        }
+        $payload = $parts[1];
+        $decoded = base64_decode(strtr($payload, '-_', '+/'));
+        return json_decode($decoded, true);
     }
 }
-?>    
