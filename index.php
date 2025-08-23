@@ -135,6 +135,18 @@ switch ($controller) {
             $ctrl->handleLogin();
         } elseif ($action === 'logout') {
             $ctrl->logout();
+        } elseif ($action === 'registerpage') {
+            $ctrl->registerPage();
+        }
+        break;
+    case 'thuoc':
+        require_once 'controllers/ThuocController.php';
+        $ctrl = new ThuocController();
+
+        if ($action === 'goiYThuoc') {
+            $ctrl->goiYThuoc();
+        } else {
+            echo "❌ Không tìm thấy action [$action] trong ThuocController";
         }
         break;
     default:

@@ -58,7 +58,14 @@ class DonThuocController {
             return;
         }
 
-        $maDT = $this->model->taoDonThuoc($maBN, $chanDoan, $ghiChu, $thuocList);
-        echo "<div class='alert alert-success'>Đơn thuốc #$maDT đã được tạo thành công.</div>";
+        $result = $this->model->taoDonThuoc($maBN, $chanDoan, $ghiChu, $thuocList);
+
+        if ($result['status'] == 200 || $result['status'] == 201) {
+            echo "<div class='alert alert-success'>Đơn thuốc đã được tạo thành công.</div>";
+        } else {
+            $errorMsg = $result['response']['message'] ?? 'Không thể tạo đơn thuốc.';
+            echo "<div class='alert alert-danger'>Lỗi: {$errorMsg}</div>";
+        }
     }
+
 }

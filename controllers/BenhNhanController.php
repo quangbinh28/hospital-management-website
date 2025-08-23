@@ -71,7 +71,6 @@ class BenhNhanController {
             // Lấy dữ liệu từ form
             $data = [
                 'maBN'   => $_POST['maBN']   ?? '',
-                'cmnd'   => $_POST['cmnd']   ?? '',
                 'ten'    => $_POST['ten']    ?? '',
                 'sdt'    => $_POST['sdt']    ?? '',
                 'ngaySinh' => $_POST['ngaySinh'] ?? '',

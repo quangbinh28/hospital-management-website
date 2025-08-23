@@ -7,8 +7,16 @@ class AuthController {
         include './template/Template.php';
     }
 
+
+    public function registerPage() {
+        $VIEW = "./views/User/DangKy.php";
+        include './template/Template.php';
+    }
+
+
+
     public function handleLogin() {
-        $username = $_POST['username'] ?? '';
+        $username = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
         $userModel = new UserModel();

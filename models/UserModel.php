@@ -35,6 +35,7 @@ class UserModel {
             $_SESSION['user'] = $payload;
             $_SESSION['IsLogined'] = true;
             $_SESSION['user']['ten']  = $data['username'];
+            $_SESSION['user']['id']  = $data['id'];
 
             // ✅ chuyển hướng sang trang mong muốn
             header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=benhnhan&action=timkiempage");
