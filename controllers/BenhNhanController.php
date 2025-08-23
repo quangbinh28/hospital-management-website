@@ -16,24 +16,28 @@ class BenhNhanController {
      * Trang tìm kiếm bệnh nhân (giao diện)
      */
     public function timKiem() {
-        // lấy dữ liệu từ form tìm kiếm 
-        $maBN   = $_POST['maBN'] ?? '';
-        $cmnd   = $_POST['cmnd'] ?? '';
-        $ten    = $_POST['ten'] ?? '';
-        $sdt    = $_POST['sdt'] ?? '';
-        $page   = $_POST['page'] ?? 1;
+        $maBN = $_POST['maBN'] ?? '';
+        $cmnd = $_POST['cmnd'] ?? '';
+        $ten  = $_POST['ten'] ?? '';
+        $sdt  = $_POST['sdt'] ?? '';
+        $page = ($_POST['page'] ?? 1) - 1; // API pageNumber bắt đầu từ 0
+        $size = 10;
 
-        // xử lý tìm kiếm (gọi model)
-        $result = $this->model->timKiemBenhNhan($maBN, $cmnd, $ten, $sdt, $page);
+        $result = $this->model->timKiemBenhNhan($maBN, $ten, $sdt, $page, $size);
 
-        // trả kết quả HTML (nếu là AJAX) hoặc hiển thị view
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $patients = $result['data'];
+            $patients     = $result['content'] ?? [];
+            $totalPages   = $result['totalPages'] ?? 1;
+            $currentPage  = ($result['number'] ?? 0) + 1; // cộng lại để hiển thị 1-based
+            $totalRecords = $result['totalElements'] ?? 0;
+
             include 'views/BenhNhan/BenhNhan_KetQua.php';
         } else {
             include 'views/BenhNhan/BenhNhan_TraCuu.php';
         }
     }
+
+
 
     /**
      * Trang chi tiết bệnh nhân
@@ -47,7 +51,8 @@ class BenhNhanController {
             $hs['KetQuaKham'] = $this->model->layKetQuaKhamTheoMaHS($hs['MaHS']);
         }
 
-        include 'views/BenhNhan/BenhNhan_ChiTiet.php';
+        $VIEW ='views/BenhNhan/BenhNhan_ChiTiet.php';
+        include './template/Template.php';
     }
 
     /**

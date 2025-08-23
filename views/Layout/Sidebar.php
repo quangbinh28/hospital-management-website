@@ -34,6 +34,15 @@
       <?php if ($_SESSION['user']['sub'] === 'ADMIN'): ?>
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'bacsi' ? 'active' : '' ?>" 
            href="index.php?controller=bacsi&action=thempage">👨‍⚕️ Thêm bác sĩ</a>
+
+        <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'benhnhan' ? 'active' : '' ?>" 
+           href="index.php?controller=benhnhan&action=timkiempage">🔍 Tra cứu bệnh nhân</a>
+        <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'benhnhan' && ($_GET['action'] ?? '') === 'thempage' ? 'active' : '' ?>" 
+           href="index.php?controller=benhnhan&action=thempage">➕ Thêm bệnh nhân</a>
+        <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'datlichpage' ? 'active' : '' ?>" 
+           href="index.php?controller=lichkham&action=datlichpage">📅 Đặt lịch khám</a>
+        <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'xacnhanpage' ? 'active' : '' ?>" 
+           href="index.php?controller=lichkham&action=xacnhanpage">📅 Xác nhận lịch khám</a>
       <?php endif; ?>
 
       <?php if ($_SESSION['user']['sub'] === 'BENHNHAN'): ?>

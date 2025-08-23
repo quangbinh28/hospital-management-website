@@ -3,17 +3,10 @@
 
     <form id="searchForm" class="row g-3 mb-4" method="post" 
           action="index.php?controller=benhnhan&action=timkiem">
-        <input type="hidden" name="controller" value="patient">
-        <input type="hidden" name="action" value="search">
 
         <div class="col-md-4">
             <label for="maBN" class="form-label">Mã bệnh nhân:</label>
             <input type="text" id="maBN" name="maBN" class="form-control">
-        </div>
-
-        <div class="col-md-4">
-            <label for="cmnd" class="form-label">CMND / CCCD:</label>
-            <input type="text" id="cmnd" name="cmnd" class="form-control">
         </div>
 
         <div class="col-md-4">
@@ -60,12 +53,15 @@ $(document).ready(function () {
         });
     }
 
+    // Nút tìm kiếm
     $('#btnSearch').click(() => search());
 
-    $('#maBN, #cmnd, #ten, #sdt').keyup(function (e) {
+    // Enter để tìm kiếm
+    $('#maBN, #ten, #sdt').keyup(function (e) {
         if (e.keyCode === 13) search();
     });
 
+    // Click phân trang
     document.addEventListener('click', function (e) {
         if (e.target.classList.contains('page-btn')) {
             e.preventDefault();

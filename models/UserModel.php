@@ -34,7 +34,7 @@ class UserModel {
             $_SESSION['refreshToken'] = $data['refreshToken'];
             $_SESSION['user'] = $payload;
             $_SESSION['IsLogined'] = true;
-            $_SESSION['user']['ten']  = $data['usernam'];
+            $_SESSION['user']['ten']  = $data['username'];
 
             // ✅ chuyển hướng sang trang mong muốn
             header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=benhnhan&action=timkiempage");

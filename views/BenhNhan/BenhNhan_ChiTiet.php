@@ -5,13 +5,11 @@
         <div class="card-body">
             <table class="table table-borderless mb-0">
                 <tbody>
-                    <tr><th>Mã BN:</th><td><?= htmlspecialchars($patient['MaBN']) ?></td></tr>
-                    <tr><th>Họ tên:</th><td><?= htmlspecialchars($patient['HoTenBN']) ?></td></tr>
-                    <tr><th>Ngày sinh:</th><td><?= htmlspecialchars($patient['NgaySinhBN']) ?></td></tr>
-                    <tr><th>Giới tính:</th><td><?= htmlspecialchars($patient['GioiTinhBN']) ?></td></tr>
-                    <tr><th>Email:</th><td><?= htmlspecialchars($patient['EmailBN']) ?></td></tr>
-                    <tr><th>Địa chỉ:</th><td><?= htmlspecialchars($patient['DiaChiBN']) ?></td></tr>
-                    <tr><th>Mã BHYT:</th><td><?= htmlspecialchars($patient['MaBHYT']) ?></td></tr>
+                    <tr><th>Mã BN:</th><td><?= htmlspecialchars($benhNhan['maBenhNhan']) ?></td></tr>
+                    <tr><th>Họ tên:</th><td><?= htmlspecialchars($benhNhan['hoTen']) ?></td></tr>
+                    <tr><th>Ngày sinh:</th><td><?= htmlspecialchars($benhNhan['ngaySinh']) ?></td></tr>
+                    <tr><th>Giới tính:</th><td><?= htmlspecialchars($benhNhan['gioiTinh']) ?></td></tr>
+                    <tr><th>Email:</th><td><?= htmlspecialchars($benhNhan['soDienThoai']) ?></td></tr>
                 </tbody>
             </table>
         </div>
@@ -19,7 +17,7 @@
 
     <!-- Nút Thêm hồ sơ -->
     <div class="text-end mb-4">
-        <a href="index.php?controller=hoso&action=them&maBN=<?= urlencode($patient['MaBN']) ?>" class="btn btn-primary">
+        <a href="index.php?controller=hoso&action=them&maBN=<?= urlencode($benhNhan['maBenhNhan']) ?>" class="btn btn-primary">
             ➕ Thêm hồ sơ bệnh án mới
         </a>
     </div>
