@@ -10,13 +10,20 @@
         </div>
 
         <div class="col-md-4">
-            <label for="tenBN" class="form-label">Tên bệnh nhân:</label>
-            <input type="text" id="tenBN" name="tenBN" class="form-control">
+            <label for="tenBN" class="form-label">Mã bệnh nhân:</label>
+            <input type="text" id="maBN" name="maBN" class="form-control">
         </div>
 
         <div class="col-md-4">
-            <label for="ngayLap" class="form-label">Ngày lập:</label>
-            <input type="date" id="ngayLap" name="ngayLap" class="form-control">
+            <label class="form-label d-block">Ngày</label>
+            <div class="row g-2">
+                <div class="col-6">
+                    <input type="date" id="tuNgay" name="tuNgay" class="form-control" placeholder="Từ ngày">
+                </div>
+                <div class="col-6">
+                    <input type="date" id="denNgay" name="denNgay" class="form-control" placeholder="Đến ngày">
+                </div>
+            </div>
         </div>
 
         <div class="col-12 text-end">
@@ -30,6 +37,7 @@
         <?php include './views/Thuoc/DonThuoc_KetQuaTraCuu.php'; ?>
     </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -55,7 +63,7 @@ $(document).ready(function () {
 
     $('#btnSearchDonThuoc').click(() => search());
 
-    $('#maDT, #tenBN, #ngayLap').keyup(function (e) {
+    $('#maDT, #tenBN, #tuNgay, #denNgay').keyup(function (e) {
         if (e.keyCode === 13) search();
     });
 

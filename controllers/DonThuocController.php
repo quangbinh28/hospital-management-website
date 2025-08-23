@@ -19,21 +19,29 @@ class DonThuocController {
     }
 
     public function timKiem() {
-        $maDT   = $_POST['maDT'] ?? '';
-        $tenBN  = $_POST['tenBN'] ?? '';
-        $ngayLap = $_POST['ngayLap'] ?? '';
-        $page   = $_POST['page'] ?? 1;
+        $maDT    = $_POST['maDT'] ?? '';
+        $maBN   = $_POST['maBN'] ?? '';
+        $tuNgay  = $_POST['tuNgay'] ?? '';
+        $denNgay = $_POST['denNgay'] ?? '';
+        $page    = ($_POST['page'] ?? 1) - 1; // API thường bắt đầu từ 0
+        $size    = 10; // Số bản ghi mỗi trang
 
-        $result = $this->model->timKiemDonThuoc($maDT, $tenBN, $ngayLap, $page);
-        $donThuocList = $result['data'];
+        // Gọi model lấy dữ liệu từ API
+        $result = $this->model->timKiemDonThuoc($maDT, $maBN, $tuNgay, $denNgay, $page, $size);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $donThuocList = $result['content'] ?? [];
+            $totalPages   = $result['totalPages'] ?? 1;
+            $currentPage  = ($result['number'] ?? 0) + 1; // cộng lại để hiển thị 1-based
+            $totalRecords = $result['totalElements'] ?? 0;
+
             include './views/Thuoc/DonThuoc_KetQuaTraCuu.php';
         } else {
             $VIEW = './views/Thuoc/DonThuoc_TraCuu.php';
             include './template/Template.php';
         }
     }
+
 
     public function chiTiet() {
         $maDT = $_GET['maDT'] ?? '';
@@ -49,23 +57,30 @@ class DonThuocController {
 
     public function luu() {
         $maBN = $_POST['maBN'] ?? '';
-        $chanDoan = $_POST['chanDoan'] ?? '';
         $ghiChu = $_POST['ghiChu'] ?? '';
         $thuocList = $_POST['thuoc'] ?? [];
 
         if (empty($maBN) || empty($thuocList)) {
-            echo "<div class='alert alert-danger'>Thiếu thông tin bệnh nhân hoặc thuốc.</div>";
+            echo "<script>alert('Thiếu thông tin bệnh nhân hoặc thuốc.');</script>";
             return;
         }
 
-        $result = $this->model->taoDonThuoc($maBN, $chanDoan, $ghiChu, $thuocList);
+        $result = $this->model->taoDonThuoc($maBN, $ghiChu, $thuocList);
 
         if ($result['status'] == 200 || $result['status'] == 201) {
-            echo "<div class='alert alert-success'>Đơn thuốc đã được tạo thành công.</div>";
+            echo "<script>
+                alert('Đơn thuốc đã được tạo thành công.');
+                window.location.href = 'http://localhost/ProjectUDPT/Website/index.php?controller=donthuoc&action=taopage';
+            </script>";
         } else {
             $errorMsg = $result['response']['message'] ?? 'Không thể tạo đơn thuốc.';
-            echo "<div class='alert alert-danger'>Lỗi: {$errorMsg}</div>";
+            $errorMsg = addslashes($errorMsg); // tránh lỗi khi có dấu '
+            echo "<script>
+                alert('Lỗi: {$errorMsg}');
+                window.location.href = 'http://localhost/ProjectUDPT/Website/index.php?controller=donthuoc&action=taopage';
+            </script>";
         }
+
     }
 
 }

@@ -6,8 +6,14 @@
             <label for="EmailBN" class="form-label">Email:</label>
             <div class="input-group">
                 <input type="email" name="EmailBN" id="EmailBN" class="form-control" required>
-                <button type="button" class="btn btn-outline-secondary">Xác nhận</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="sendOtp()">Xác nhận</button>
             </div>
+        </div>
+
+        <!-- Mã xác nhận -->
+        <div class="mb-3">
+            <label for="MaXacNhan" class="form-label">Mã xác nhận:</label>
+            <input type="text" name="MaXacNhan" id="MaXacNhan" class="form-control" placeholder="Nhập mã xác nhận" required>
         </div>
 
         <!-- Password -->
@@ -37,6 +43,12 @@
         <div class="mb-3">
             <label for="MaBHYT" class="form-label">Mã BHYT:</label>
             <input type="text" name="MaBHYT" id="MaBHYT" class="form-control">
+        </div>
+
+        <!-- Số điện thoại -->
+        <div class="mb-3">
+            <label for="SoDTBN" class="form-label">Số điện thoại:</label>
+            <input type="tel" name="SoDTBN" id="SoDTBN" class="form-control" pattern="[0-9]{9,11}" placeholder="Nhập số điện thoại" required>
         </div>
 
         <!-- Địa chỉ -->

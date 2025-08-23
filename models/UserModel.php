@@ -39,7 +39,7 @@ class UserModel {
 
             // ✅ chuyển hướng sang trang mong muốn
             header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=benhnhan&action=timkiempage");
-            exit(); // quan trọng: dừng hẳn sau redirect
+            exit(); 
         }
 
         $_SESSION['IsLogined'] = false;
@@ -57,5 +57,42 @@ class UserModel {
         $payload = $parts[1];
         $decoded = base64_decode(strtr($payload, '-_', '+/'));
         return json_decode($decoded, true);
+    }
+
+    public function handleRegister($data) {
+        $url = "http://localhost:8080/api/v1/auth/register";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            return [
+                "success" => false,
+                "error" => curl_error($ch)
+            ];
+        }
+
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        if (isset($result['success']) && $result['success'] === true) {
+            return [
+                "success" => true,
+                "data" => $result
+            ];
+        } else {
+            return [
+                "success" => false,
+                "error" => $result['message'] ?? "Đăng ký thất bại"
+            ];
+        }
     }
 }

@@ -143,7 +143,7 @@ switch ($controller) {
         require_once 'controllers/ThuocController.php';
         $ctrl = new ThuocController();
 
-        if ($action === 'goiYThuoc') {
+        if ($action === 'goiythuoc') {
             $ctrl->goiYThuoc();
         } else {
             echo "❌ Không tìm thấy action [$action] trong ThuocController";

@@ -9,10 +9,6 @@
             <label for="maBN" class="form-label">Mã bệnh nhân:</label>
             <input type="text" id="maBN" name="maBN" class="form-control" required>
         </div>
-        <div class="col-md-8">
-            <label for="chanDoan" class="form-label">Chẩn đoán:</label>
-            <input type="text" id="chanDoan" name="chanDoan" class="form-control" required>
-        </div>
 
         <!-- Danh sách thuốc -->
         <div class="col-12">
@@ -30,7 +26,8 @@
                     <tbody>
                         <tr>
                             <td class="position-relative">
-                                <input type="text" name="thuoc[0][ten]" class="form-control ten-thuoc" required>
+                                <input type="text" name="thuoc[0][tenThuoc]" class="form-control ten-thuoc" required>
+                                <input type="hidden" name="thuoc[0][maThuoc]">
                                 <div class="suggestions"></div>
                             </td>
                             <td><input type="number" name="thuoc[0][soLuong]" class="form-control" required></td>
@@ -58,13 +55,12 @@
     </form>
 </div>
 
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(function () {
-    let thuocIndex = 1;
+    let thuocIndex = $("#thuocTable tbody tr").length; // index tăng liên tục
 
-    // debounce helper
+    // ===== Debounce helper =====
     function debounce(func, delay) {
         let timeout;
         return function(...args) {
@@ -73,10 +69,10 @@ $(function () {
         };
     }
 
-    // gọi API gợi ý thuốc
+    // ===== Gợi ý thuốc =====
     function goiYThuoc(input) {
         let keyword = $(input).val().trim();
-        let $container = $(input).siblings(".suggestions");
+        let $container = $(input).closest("td").find(".suggestions");
 
         if (keyword.length < 2) {
             $container.empty();
@@ -86,32 +82,47 @@ $(function () {
         $.getJSON("index.php", { controller: "thuoc", action: "goiYThuoc", q: keyword }, function(data) {
             let $list = $("<ul class='list-group position-absolute w-100' style='z-index:1000;'></ul>");
             (data || []).forEach(item => {
-                $list.append(`<li class="list-group-item suggestion-item" style="cursor:pointer;">${item.ten_thuoc}</li>`);
+                $list.append(`
+                    <li class="list-group-item suggestion-item" 
+                        data-ma="${item.maThuoc}" 
+                        data-ten="${item.tenThuoc}" 
+                        style="cursor:pointer;">
+                        ${item.tenThuoc}
+                    </li>
+                `);
             });
 
             $container.html($list);
 
-            // khi chọn gợi ý
+            // Khi chọn gợi ý
             $list.find(".suggestion-item").click(function() {
-                $(input).val($(this).text());
+                let ten = $(this).data("ten");
+                let ma = $(this).data("ma");
+
+                $(input).val(ten);
+                $(input).closest("td").find("input[type=hidden]").val(ma);
+
                 $container.empty();
             });
         });
     }
 
-    const debouncedGoiY = debounce(function() {
-        goiYThuoc(this);
+    const debouncedGoiY = debounce(function(e) {
+        goiYThuoc(e.target);
     }, 400);
 
-    // lắng nghe input trên tên thuốc (cả dòng mới thêm)
-    $(document).on("input", ".ten-thuoc", debouncedGoiY);
+    // Lắng nghe input trên tất cả ô tên thuốc
+    $(document).on("input", ".ten-thuoc", function(e) {
+        debouncedGoiY(e);
+    });
 
-    // thêm dòng thuốc mới
+    // ===== Thêm dòng thuốc mới =====
     $("#themThuoc").click(function () {
         let row = `
             <tr>
                 <td class="position-relative">
-                    <input type="text" name="thuoc[${thuocIndex}][ten]" class="form-control ten-thuoc" required>
+                    <input type="text" name="thuoc[${thuocIndex}][tenThuoc]" class="form-control ten-thuoc" required>
+                    <input type="hidden" name="thuoc[${thuocIndex}][maThuoc]">
                     <div class="suggestions"></div>
                 </td>
                 <td><input type="number" name="thuoc[${thuocIndex}][soLuong]" class="form-control" required></td>
@@ -125,9 +136,42 @@ $(function () {
         thuocIndex++;
     });
 
-    // xóa dòng thuốc
+    // ===== Xóa thuốc =====
     $(document).on("click", ".xoaThuoc", function () {
         $(this).closest("tr").remove();
+    });
+
+    // ===== Trước khi submit form: in ra payload =====
+    $("#taoDonThuocForm").on("submit", function(e) {
+        e.preventDefault(); // chặn submit để debug
+
+        let thuocList = [];
+
+        $("#thuocTable tbody tr").each(function() {
+            let ten = $(this).find("input[name*='[tenThuoc]']").val();
+            let ma = $(this).find("input[name*='[maThuoc]']").val();
+            let soLuong = $(this).find("input[name*='[soLuong]']").val();
+            let chiDinh = $(this).find("input[name*='[chiDinh]']").val();
+
+            if (!ma && ten) {
+                ma = ten; // fallback nếu không có mã thuốc
+            }
+
+            thuocList.push({
+                maThuoc: ma,
+                tenThuoc: ten,
+                soLuong: parseInt(soLuong, 10) || 0,
+                chiDinh: chiDinh
+            });
+        });
+
+        let payload = {
+            maBenhNhan: $("#maBN").val(),
+            ghiChu: $("#ghiChu").val(),
+            prescriptionDetails: thuocList
+        };
+
+        this.submit();
     });
 });
 </script>
