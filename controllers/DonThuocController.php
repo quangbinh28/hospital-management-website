@@ -20,15 +20,16 @@ class DonThuocController {
     }
 
     public function timKiem() {
-        $maDT    = $_POST['maDT'] ?? '';
+        $maBS    = $_POST['maBS'] ?? '';
         $maBN   = $_POST['maBN'] ?? '';
         $tuNgay  = $_POST['tuNgay'] ?? '';
         $denNgay = $_POST['denNgay'] ?? '';
+        $trangThai = $_POST['trangThai'] ?? '';
         $page    = ($_POST['page'] ?? 1) - 1; // API thường bắt đầu từ 0
         $size    = 10; // Số bản ghi mỗi trang
 
         // Gọi model lấy dữ liệu từ API
-        $result = $this->model->timKiemDonThuoc($maDT, $maBN, $tuNgay, $denNgay, $page, $size);
+        $result = $this->model->timKiemDonThuoc($maBN, $tuNgay, $denNgay, $page, $size, $trangThai, $maBS);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $donThuocList = $result['content'] ?? [];

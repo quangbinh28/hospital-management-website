@@ -5,8 +5,8 @@
           action="index.php?controller=donthuoc&action=tracuu">
 
         <div class="col-md-3">
-            <label for="maDT" class="form-label">Mã đơn thuốc:</label>
-            <input type="text" id="maDT" name="maDT" class="form-control">
+            <label for="maBS" class="form-label">Mã bác sĩ:</label>
+            <input type="text" id="maBS" name="maBS" class="form-control">
         </div>
 
         <div class="col-md-3">
@@ -14,7 +14,17 @@
             <input type="text" id="maBN" name="maBN" class="form-control">
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <label for="trangThai" class="form-label">Trạng thái:</label>
+            <select id="trangThai" name="trangThai" class="form-select">
+                <option value="">-- Chọn trạng thái --</option>
+                <option value="DOI_LAY_THUOC">ĐỢI LẤY THUỐC</option>
+                <option value="DA_SAN_SANG">ĐÃ SẴN SÀNG</option>
+                <option value="DA_NHAN">ĐÃ NHẬN</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
             <div class="row g-2">
                 <div class="col-6">
                     <label for="tuNgay" class="form-label small">Từ ngày</label>
@@ -27,8 +37,8 @@
             </div>
         </div>
 
-        <div class="col-md-2 text-end d-flex align-items-end">
-            <button type="button" id="btnSearchDonThuoc" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
+        <div class="col-md-12 text-end d-flex align-items-end justify-content-end">
+            <button type="button" id="btnSearchDonThuoc" class="btn btn-primary w-25">🔍 Tìm kiếm</button>
         </div>
     </form>
 
@@ -64,8 +74,8 @@ $(document).ready(function () {
 
     $('#btnSearchDonThuoc').click(() => search());
 
-    $('#maDT, #maBN, #tuNgay, #denNgay').keyup(function (e) {
-        if (e.keyCode === 13) search();
+    $('#maDT, #maBN, #tuNgay, #denNgay, #trangThai').on('keyup change', function (e) {
+        if (e.keyCode === 13 || e.type === 'change') search();
     });
 
     document.addEventListener('click', function (e) {

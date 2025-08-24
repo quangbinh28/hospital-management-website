@@ -114,37 +114,94 @@ class LichKhamController {
     }
 
 
-    public function xacNhanLichPage() {
+    public function traCuuPage() {
         $ngay = $_GET['ngay'] ?? '';
-        $dsLichKham = $this->model->layLichKhamChuaXacNhan($ngay);
-        $VIEW = './views/LichKham/XacNhan.php';
+        $VIEW = './views/LichKham/LichKham_TraCuu.php';
         include './template/Template.php';
     }
+
+    public function traCuuLichKham() {
+        // Lấy các tiêu chí từ form
+        $maBS    = $_POST['maBS'] ?? '';
+        $maBN    = $_POST['maBN'] ?? '';
+        $ngayTu  = $_POST['ngayTu'] ?? '';
+        $ngayDen = $_POST['ngayDen'] ?? '';
+        $tinhTrang = $_POST['tinhTrang'] ?? '';
+        $page    = ($_POST['page'] ?? 1) - 1; // API thường bắt đầu từ 0
+        $size    = 10; // số bản ghi mỗi trang
+
+        // Gọi model lấy dữ liệu từ API
+        $result = $this->model->timKiemLichKham($maBS, $maBN, $ngayTu, $ngayDen, $tinhTrang, $page, $size);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Dữ liệu hiển thị trong bảng kết quả
+            $dsLichKham   = $result['content'] ?? [];
+            $totalPages   = $result['totalPages'] ?? 1;
+            $currentPage  = ($result['number'] ?? 0) + 1; // API trả 0-based, hiển thị 1-based
+            $totalRecords = $result['totalElements'] ?? 0;
+
+            include './views/LichKham/LichKham_KetQua.php';
+        } else {
+            // Khi load lần đầu, hiển thị form
+            $VIEW = './views/LichKham/LichKham_TraCuu.php';
+            include './template/Template.php';
+        }
+    }
+
 
     public function locLichKhamTheoNgay() {
         $ngay = $_GET['ngay'] ?? '';
         $dsLichKham = $this->model->layLichKhamChuaXacNhan($ngay);
-        $VIEW = './views/LichKham/XacNhan.php';
+        $VIEW = './views/LichKham/LichKham_TraCuu.php';
         include './template/Template.php';
     }
 
     public function xacNhanLich($maLich) {
-        if ($maLich) {
-            $this->model->capNhatTrangThaiLichKham($maLich, 'xac_nhan');
-            alert('Lịch Khám đã được xác nhận');
+        if (!$maLich) {
+            echo "<div class='alert alert-danger'>Mã lịch khám không hợp lệ.</div>";
+            return;
         }
-        
-        exit();
+
+        $result = $this->model->xacNhanLich($maLich);
+
+        if ($result['status'] == 200) {
+            echo "<script>
+                alert('Lịch khám #{$maLich} đã được xác nhận thành công.');
+                window.location.href = 'index.php?controller=lichkham&action=tracuu';
+            </script>";
+        } else {
+            $errorMsg = $result['error'] ?? 'Không thể xác nhận lịch khám.';
+            $errorMsg = addslashes($errorMsg);
+            echo "<script>
+                alert('Lỗi: {$errorMsg}');
+                window.location.href = 'index.php?controller=lichkham&action=tracuu';
+            </script>";
+        }
     }
 
     public function huyLich($maLich) {
-        if ($maLich) {
-            $this->model->capNhatTrangThaiLichKham($maLich, 'huy');
-            alert('Hủy thành công');
+        if (!$maLich) {
+            echo "<div class='alert alert-danger'>Mã lịch khám không hợp lệ.</div>";
+            return;
         }
-        
-        exit();
+
+        $result = $this->model->huyLich($maLich);
+
+        if ($result['status'] == 200) {
+            echo "<script>
+                alert('Lịch khám #{$maLich} đã được hủy thành công.');
+                window.location.href = 'index.php?controller=lichkham&action=tracuu';
+            </script>";
+        } else {
+            $errorMsg = $result['error'] ?? 'Không thể hủy lịch khám.';
+            $errorMsg = addslashes($errorMsg);
+            echo "<script>
+                alert('Lỗi: {$errorMsg}');
+                window.location.href = 'index.php?controller=lichkham&action=tracuu';
+            </script>";
+        }
     }
+
 
     /**
      * Xem lịch khám đã xác nhận của người dùng đang đăng nhập
@@ -165,7 +222,7 @@ class LichKhamController {
         $tuNgay = $_POST['tu_ngay'] ?? null;
         $denNgay = $_POST['den_ngay'] ?? null;
 
-        $lichKham = $model->layLichKhamDaXacNhan($maTaiKhoan, $tuNgay, $denNgay);
+        $lichKham = $model->layDanhSachLichKham();
 
         $VIEW = './views/LichKham/XemLichKham.php';
         include './template/Template.php';

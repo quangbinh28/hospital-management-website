@@ -173,38 +173,120 @@ class LichKhamModel {
             "response" => $respArray
         ];
     }
+    
+    public function xacNhanLich($maLich) {
+        $url = "http://localhost:8080/api/v1/appointments/checkin/" . urlencode($maLich);
+        $token = $_SESSION['accessToken'] ?? '';
 
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT"); // PUT cho checkin
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json",
+        ]);
 
-    public function layLichKhamChuaXacNhan($ngay = '') {
-        if (empty($ngay)) {
-            return $this->lichKhamMau;
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            return ['status' => $httpCode, 'data' => json_decode($response, true)];
+        } else {
+            return ['status' => $httpCode, 'error' => $response];
         }
-        // Lọc theo ngày
-        return array_filter($this->lichKhamMau, function($lich) use ($ngay) {
-            return $lich['ngayKham'] === $ngay;
-        });
     }
 
-    public function capNhatTrangThaiLichKham($maLich, $trangThai) {
-        // Hiện tại chưa lưu vào DB, chỉ mô phỏng thành công
-        return true;
+    public function huyLich($maLich) {
+        $url = "http://localhost:8080/api/v1/appointments/cancel/" . urlencode($maLich);
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE"); // DELETE cho hủy lịch
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json",
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            return ['status' => $httpCode, 'data' => json_decode($response, true)];
+        } else {
+            return ['status' => $httpCode, 'error' => $response];
+        }
     }
 
-    public function layLichKhamDaXacNhan($maTaiKhoan, $tuNgay = null, $denNgay = null) {
-        // Dữ liệu mẫu
-        $data = [
-            ['NgayKham' => '2025-08-15', 'GioKham' => '08:00', 'BacSi' => 'Nguyễn Văn A', 'Phong' => '101'],
-            ['NgayKham' => '2025-08-18', 'GioKham' => '09:30', 'BacSi' => 'Trần Thị B', 'Phong' => '202'],
-            ['NgayKham' => '2025-08-20', 'GioKham' => '14:00', 'BacSi' => 'Phạm Văn C', 'Phong' => '303'],
+
+    public function timKiemLichKham(
+        $maBS = '', 
+        $maBN = '', 
+        $ngayTu = '', 
+        $ngayDen = '', 
+        $tinhTrang = '', 
+        $page = 0, 
+        $size = 10
+    ) {
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $url = "http://localhost:8080/api/v1/appointments/search";
+
+        // Chỉ giữ các param không rỗng
+        $params = array_filter([
+            'maBS'       => $maBS,
+            'maBN'       => $maBN,
+            'ngayKhamTu' => $ngayTu,
+            'ngayKhamDen'=> $ngayDen,
+            'tinhTrang'  => $tinhTrang,
+            'page'       => $page,
+            'size'       => $size
+        ]);
+
+        $fullUrl = $url . '?' . http_build_query($params);
+
+        $ch = curl_init($fullUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json"
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return [
+                'content'       => [],
+                'totalPages'    => 0,
+                'number'        => 0,
+                'totalElements' => 0,
+                'error'         => curl_error($ch)
+            ];
+        }
+
+        curl_close($ch);
+
+        $data = json_decode($response, true);
+        if (!$data) {
+            return [
+                'content'       => [],
+                'totalPages'    => 0,
+                'number'        => 0,
+                'totalElements' => 0,
+                'error'         => "JSON Decode Error: " . json_last_error_msg()
+            ];
+        }
+
+        return [
+            'content'       => $data['content'] ?? [],
+            'totalPages'    => $data['totalPages'] ?? 1,
+            'number'        => $data['number'] ?? 0,
+            'totalElements' => $data['totalElements'] ?? count($data['content'] ?? [])
         ];
-
-        // Lọc theo ngày nếu có chọn
-        if ($tuNgay && $denNgay) {
-            $data = array_filter($data, function ($item) use ($tuNgay, $denNgay) {
-                return $item['NgayKham'] >= $tuNgay && $item['NgayKham'] <= $denNgay;
-            });
-        }
-
-        return $data;
     }
+
+
 }

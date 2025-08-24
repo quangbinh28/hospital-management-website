@@ -14,7 +14,7 @@
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'datlichpage' ? 'active' : '' ?>" 
            href="index.php?controller=lichkham&action=datlichpage">📅 Đặt lịch khám</a>
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'xacnhanpage' ? 'active' : '' ?>" 
-           href="index.php?controller=lichkham&action=xacnhanpage">📅 Xác nhận lịch khám</a>
+           href="index.php?controller=lichkham&action=tracuupage">📅 Tra cứu lịch khám</a>
       <?php endif; ?>
 
       <?php if ($_SESSION['user']['sub'] === 'BACSI'): ?>
@@ -42,7 +42,7 @@
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'datlichpage' ? 'active' : '' ?>" 
            href="index.php?controller=lichkham&action=datlichpage">📅 Đặt lịch khám</a>
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'lichkham' && ($_GET['action'] ?? '') === 'xacnhanpage' ? 'active' : '' ?>" 
-           href="index.php?controller=lichkham&action=xacnhanpage">📅 Xác nhận lịch khám</a>
+           href="index.php?controller=lichkham&action=tracuupage">📅 Tra cứu lịch khám</a>
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'donthuoc' ? 'active' : '' ?>" 
            href="index.php?controller=donthuoc&action=taopage">💊 Tạo đơn thuốc</a>
       <?php endif; ?>

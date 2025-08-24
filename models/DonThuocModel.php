@@ -50,9 +50,8 @@ class DonThuocModel {
     }
 
 
-    public function timKiemDonThuoc($maDT = '', $maBN = '', $tuNgay = '', $denNgay = '', $page = 0, $size = 10, $maBS = '') {
+    public function timKiemDonThuoc($maBN = '', $tuNgay = '', $denNgay = '', $page = 0, $size = 10, $trangThai = '', $maBS = '') {
         // Lấy mã bác sĩ từ session (nếu cần)
-        $maBS = $_SESSION['id'] ?? '';
         $token = $_SESSION['accessToken'] ?? '';
 
         $url = "http://localhost:8080/api/v1/prescriptions/search";
@@ -65,6 +64,7 @@ class DonThuocModel {
             'denNgay'=> $denNgay,
             'page'   => $page,
             'size'   => $size,
+            'status' => $trangThai
         ]);
 
         $fullUrl = $url . '?' . $query;

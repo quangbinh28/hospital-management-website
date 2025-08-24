@@ -107,12 +107,14 @@ switch ($controller) {
             $ctrl->datLichKham();
         } elseif ($action === 'xacnhanpage') {
             $ctrl->xacNhanLichPage();
-        } elseif ($action === 'loclichkhamtheongay') {
-            $ctrl->locLichKhamTheoNgay();
-        } elseif ($action === 'xacnhanlich' && isset($_POST['maLich'])) {
-            $ctrl->xacNhanLich($_POST['maLich']);
-        } elseif ($action === 'huylich' && isset($_POST['maLich'])) {
-            $ctrl->huyLich($_POST['maLich']);
+        } elseif ($action === 'tracuu') {
+            $ctrl->traCuuLichKham();
+        }elseif ($action === 'tracuupage') {
+            $ctrl->traCuuPage();
+        } elseif ($action === 'xacnhanlich' && isset($_GET['maLich'])) {
+            $ctrl->xacNhanLich($_GET['maLich']);
+        } elseif ($action === 'huylich' && isset($_GET['maLich'])) {
+            $ctrl->huyLich($_GET['maLich']);
         } elseif ($action === 'xem') {
             $ctrl->xemLichKham();
         } else {
