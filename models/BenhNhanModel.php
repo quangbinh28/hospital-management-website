@@ -1,7 +1,6 @@
 <?php
 class BenhNhanModel {
     public function __construct() {
-        // Khởi tạo, có thể kết nối API hoặc DB nếu cần
     }
 
     /**
@@ -98,9 +97,40 @@ class BenhNhanModel {
      * Lấy danh sách hồ sơ bệnh án của bệnh nhân
      */
     public function layHoSoBenhNhan($maBN) {
-        // TODO: Thêm logic lấy danh sách hồ sơ
-        return [];
+        // Lấy token từ session (nếu API cần xác thực)
+        $token = $_SESSION['accessToken'] ?? '';
+
+        // URL API chi tiết hồ sơ bệnh nhân
+        $url = "http://localhost:8080/api/v1/records/details/" . urlencode($maBN);
+
+        // Khởi tạo cURL
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json",
+        ]);
+
+        // Thực hiện gọi API
+        $response = curl_exec($ch);
+
+        // Xử lý lỗi cURL
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            return [
+                'error' => "cURL Error: {$error}"
+            ];
+        }
+
+        curl_close($ch);
+
+        // Giải mã JSON trả về
+        $data = json_decode($response, true);
+
+        return $data ?: [];
     }
+
 
     /**
      * Thêm bệnh nhân

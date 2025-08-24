@@ -46,11 +46,6 @@ class BenhNhanController {
         $benhNhan = $this->model->layThongTinBenhNhan($maBN);
         $hoSoList = $this->model->layHoSoBenhNhan($maBN);
 
-        // mỗi hồ sơ có thể có 1 kết quả khám
-        foreach ($hoSoList as &$hs) {
-            $hs['KetQuaKham'] = $this->model->layKetQuaKhamTheoMaHS($hs['MaHS']);
-        }
-
         $VIEW ='views/BenhNhan/BenhNhan_ChiTiet.php';
         include './template/Template.php';
     }

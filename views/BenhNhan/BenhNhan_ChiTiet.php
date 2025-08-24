@@ -24,24 +24,17 @@
 
     <!-- Hồ sơ bệnh án -->
     <h4 class="text-secondary mb-3">🗂 Hồ sơ bệnh án</h4>
-    <?php if (!empty($hosos)): ?>
-        <?php foreach ($hosos as $hs): ?>
+    <?php if (!empty($hoSoList)): ?>
+        <?php foreach ($hoSoList as $hs): ?>
             <div class="card mb-3 shadow-sm">
                 <div class="card-header fw-bold">
                     Mã HS: <?= htmlspecialchars($hs['MaHS']) ?>
                 </div>
                 <div class="card-body">
-                    <p><strong>Chẩn đoán ban đầu:</strong> <?= htmlspecialchars($hs['ChanDoanBanDau']) ?></p>
-                    <p><strong>Triệu chứng:</strong> <?= htmlspecialchars($hs['TrieuChung']) ?></p>
-                    <p><strong>Ghi chú điều trị:</strong> <?= htmlspecialchars($hs['GhiChu']) ?></p>
-
-                    <?php if (!empty($hs['KetQuaKham'])): ?>
-                        <hr>
-                        <h5 class="text-success">📋 Kết quả khám</h5>
-                        <p><strong>Triệu chứng:</strong> <?= htmlspecialchars($hs['KetQuaKham']['TrieuChung']) ?></p>
-                        <p><strong>Chẩn đoán:</strong> <?= htmlspecialchars($hs['KetQuaKham']['ChanDoan']) ?></p>
-                        <p><strong>Ghi chú:</strong> <?= htmlspecialchars($hs['KetQuaKham']['GhiChu']) ?></p>
-                    <?php endif; ?>
+                    <p><strong>Ngày khám:</strong> <?= htmlspecialchars($hs['ngayKham']) ?></p>
+                    <p><strong>Chẩn đoán:</strong> <?= htmlspecialchars($hs['chanDoan']) ?></p>
+                    <p><strong>Triệu chứng:</strong> <?= htmlspecialchars($hs['trieuChung']) ?></p>
+                    <p><strong>Ghi chú điều trị:</strong> <?= htmlspecialchars($hs['ghiChu']) ?></p>
                 </div>
             </div>
         <?php endforeach; ?>

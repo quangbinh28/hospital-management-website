@@ -15,7 +15,7 @@
 
     <!-- Form thêm hồ sơ -->
     <form action="index.php?controller=hoso&action=luu" method="post" class="row g-3">
-        <input type="hidden" name="ma_bn" value="<?= $benhNhan['maBenhNhan'] ?>">
+        <input type="hidden" name="maBenhNhan" value="<?= $benhNhan['maBenhNhan'] ?>">
 
         <div class="col-md-6">
             <label class="form-label">Chẩn đoán ban đầu:</label>
