@@ -84,6 +84,10 @@ switch ($controller) {
             $ctrl->timKiem();
         } elseif ($action === 'chitiet' && isset($_GET['maDT'])) {
             $ctrl->chiTiet($_GET['maDT']);
+        } elseif ($action === 'sansang' && isset($_GET['maDT'])) {
+            $ctrl->sanSang($_GET['maDT']);
+        } elseif ($action === 'dalay' && isset($_GET['maDT'])) {
+            $ctrl->daLay($_GET['maDT']);
         } else {
             echo "❌ Không tìm thấy action [$action] trong DonThuocController";
         }
@@ -95,7 +99,7 @@ switch ($controller) {
 
         if ($action === 'datlichpage') {
             $ctrl->datLichPage();
-        } elseif ($action === 'laybacsitehokhoa') {
+        } elseif ($action === 'laybacsitheokhoa') {
             $ctrl->layBacSiTheoKhoa();
         } elseif ($action === 'laycakhamtheobacsi') {
             $ctrl->layCaKhamTheoBacSi();

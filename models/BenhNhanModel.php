@@ -103,14 +103,6 @@ class BenhNhanModel {
     }
 
     /**
-     * Lấy kết quả khám theo mã hồ sơ
-     */
-    public function layKetQuaKhamTheoMaHS($maHS) {
-        // TODO: Thêm logic lấy kết quả khám
-        return [];
-    }
-
-    /**
      * Thêm bệnh nhân
      */
     public function themBenhNhan($data) {

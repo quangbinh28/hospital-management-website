@@ -1,5 +1,6 @@
 <?php
 require_once 'models/DonThuocModel.php';
+require_once 'models/BenhNhanModel.php';
 
 class DonThuocController {
     private $model;
@@ -50,9 +51,17 @@ class DonThuocController {
             return;
         }
 
-        $donThuoc = $this->model->layChiTietDonThuoc($maDT);
-        $VIEW = './views/Thuoc/DonThuoc_ChiTiet.php';
-        include './template/Template.php';
+        $result = $this->model->layChiTietDonThuoc($maDT);
+
+        if ($result['status'] == 200) {
+            // Lấy dữ liệu đơn thuốc
+            $donThuoc = $result['data'];
+            $VIEW = './views/Thuoc/DonThuoc_ChiTiet.php';
+            include './template/Template.php';
+        } else {
+            $err = $result['error'] ?? 'Không lấy được chi tiết đơn thuốc.';
+            echo "<div class='alert alert-danger'>Lỗi: {$err}</div>";
+        }
     }
 
     public function luu() {
@@ -80,7 +89,57 @@ class DonThuocController {
                 window.location.href = 'http://localhost/ProjectUDPT/Website/index.php?controller=donthuoc&action=taopage';
             </script>";
         }
-
     }
 
+    /**
+     * Đặt trạng thái đơn thuốc thành "Sẵn sàng"
+     */
+    public function sanSang($maDT) {
+        if (!$maDT) {
+            echo "<div class='alert alert-danger'>Mã đơn thuốc không hợp lệ.</div>";
+            return;
+        }
+
+        $result = $this->model->sanSang($maDT);
+
+        if ($result['status'] == 200) {
+            echo "<script>
+                alert('Đơn thuốc #{$maDT} đã được đặt trạng thái Sẵn sàng.');
+                window.location.href = 'index.php?controller=donthuoc&action=tracuu';
+            </script>";
+        } else {
+            $errorMsg = $result['error'] ?? 'Không thể cập nhật trạng thái.';
+            $errorMsg = addslashes($errorMsg);
+            echo "<script>
+                alert('Lỗi: {$errorMsg}');
+                window.location.href = 'index.php?controller=donthuoc&action=tracuu';
+            </script>";
+        }
+    }
+
+    /**
+     * Đặt trạng thái đơn thuốc thành "Đã lấy"
+     */
+    public function daLay($maDT) {
+        if (!$maDT) {
+            echo "<div class='alert alert-danger'>Mã đơn thuốc không hợp lệ.</div>";
+            return;
+        }
+
+        $result = $this->model->daLay($maDT);
+
+        if ($result['status'] == 200) {
+            echo "<script>
+                alert('Đơn thuốc #{$maDT} đã được đặt trạng thái Đã lấy.');
+                window.location.href = 'index.php?controller=donthuoc&action=tracuu';
+            </script>";
+        } else {
+            $errorMsg = $result['error'] ?? 'Không thể cập nhật trạng thái.';
+            $errorMsg = addslashes($errorMsg);
+            echo "<script>
+                alert('Lỗi: {$errorMsg}');
+                window.location.href = 'index.php?controller=donthuoc&action=tracuu';
+            </script>";
+        }
+    }
 }

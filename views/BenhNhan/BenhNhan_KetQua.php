@@ -17,6 +17,10 @@
                 <th>Giới tính</th>
                 <th>Điện thoại</th>
                 <th>Chi tiết</th>
+                <?php if (isset($_SESSION['user']['sub']) && 
+                        ($_SESSION['user']['sub'] === 'TIEPTAN' || $_SESSION['user']['sub'] === 'ADMIN')): ?>
+                    <th>Hành động</th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +41,15 @@
                             Thêm bệnh án
                         </a>
                     </td>
+                    <?php if (isset($_SESSION['user']['sub']) && 
+                            ($_SESSION['user']['sub'] === 'TIEPTAN' || $_SESSION['user']['sub'] === 'ADMIN')): ?>
+                        <td>
+                            <a href="index.php?controller=lichkham&action=datlichpage&maBN=<?= urlencode($bn['maBenhNhan'] ?? '') ?>"
+                               class="btn btn-sm btn-primary">
+                               Đặt lịch khám
+                            </a>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach ?>
         </tbody>
@@ -46,21 +59,18 @@
     <?php if (!empty($totalPages) && $totalPages > 1): ?>
         <nav>
             <ul class="pagination justify-content-center">
-                <!-- Nút Prev -->
                 <?php if ($currentPage > 1): ?>
                     <li class="page-item">
                         <a href="#" class="page-link page-btn" data-page="<?= $currentPage - 1 ?>">«</a>
                     </li>
                 <?php endif; ?>
 
-                <!-- Các số trang -->
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
                         <a href="#" class="page-link page-btn" data-page="<?= $i ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
 
-                <!-- Nút Next -->
                 <?php if ($currentPage < $totalPages): ?>
                     <li class="page-item">
                         <a href="#" class="page-link page-btn" data-page="<?= $currentPage + 1 ?>">»</a>

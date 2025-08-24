@@ -11,23 +11,37 @@
     <table class="table table-bordered table-hover">
         <thead class="table-light">
             <tr>
+                <th>Mã đơn thuốc</th>
                 <th>Mã bác sĩ</th>
                 <th>Mã bệnh nhân</th>
                 <th>Ghi chú</th>
+                <th>Tình trạng</th>
                 <th>Ngày cấp</th>
-                <th></th>
+                <th>Thao tác</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($donThuocList as $dt): ?>
                 <tr>
+                    <td><?= htmlspecialchars($dt['maDonThuoc'] ?? '') ?></td>
                     <td><?= htmlspecialchars($dt['maBacSi'] ?? '') ?></td>
                     <td><?= htmlspecialchars($dt['maBenhNhan'] ?? '') ?></td>
                     <td><?= htmlspecialchars($dt['ghiChu'] ?? '') ?></td>
+                    <td><?= htmlspecialchars($dt['tinhTrang'] ?? '') ?></td>
                     <td><?= htmlspecialchars($dt['ngayCap'] ?? '') ?></td>
                     <td>
-                        <a href="index.php?controller=donthuoc&action=chitiet&maDT=<?= urlencode($dt['MaDT'] ?? '') ?>" 
-                           class="btn btn-sm btn-info">📄 Xem</a>
+                        <!-- Luôn có nút xem -->
+                        <a href="index.php?controller=donthuoc&action=chitiet&maDT=<?= urlencode($dt['maDonThuoc'] ?? '') ?>" 
+                           class="btn btn-sm btn-info mb-1">📄 Xem</a>
+
+                        <!-- Nếu là dược sĩ thì hiện thêm nút -->
+                        <?php if (!empty($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'DUOCSI'): ?>
+                            <a href="index.php?controller=donthuoc&action=sansang&maDT=<?= urlencode($dt['maDonThuoc']) ?>&status=sansang" 
+                               class="btn btn-sm btn-success mb-1">✅ Sẵn sàng</a>
+
+                            <a href="index.php?controller=donthuoc&action=dalay&maDT=<?= urlencode($dt['maDonThuoc']) ?>&status=dalay" 
+                               class="btn btn-sm btn-warning mb-1">📦 Đã gửi</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

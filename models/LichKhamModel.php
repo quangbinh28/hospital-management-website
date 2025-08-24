@@ -33,21 +33,147 @@ class LichKhamModel {
     }
 
     public function layDanhSachChuyenKhoa() {
-        return []; // Dữ liệu mẫu, cần query DB thật khi triển khai
+        $url = "http://localhost:8080/api/v1/departments/all-departments";
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json"
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return ['error' => 'cURL Error: ' . curl_error($ch)];
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            $data = json_decode($response, true);
+            return $data ?: [];
+        } else {
+            return ['error' => "HTTP {$httpCode}: {$response}"];
+        }
     }
 
     public function layDanhSachBacSiTheoKhoa($maKhoa) {
-        return [];
+        $url = "http://localhost:8080/api/v1/departments/doctors/" . urlencode($maKhoa);
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json"
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return ['error' => 'cURL Error: ' . curl_error($ch)];
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            $data = json_decode($response, true);
+            return $data ?: [];
+        } else {
+            return ['error' => "HTTP {$httpCode}: {$response}"];
+        }
     }
+
 
     public function layDanhSachCaKhamTheoBacSi($maBS) {
-        return [];
+        $url = "http://localhost:8080/api/v1/schedules/" . urlencode($maBS);
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json"
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return ['error' => 'cURL Error: ' . curl_error($ch)];
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            $data = json_decode($response, true);
+            return $data ?: [];
+        } else {
+            return ['error' => "HTTP {$httpCode}: {$response}"];
+        }
     }
 
-    public function datLichKham($maBS, $ngay, $gio, $nguyenNhan, $nguoiDK) {
-        // Ở đây chỉ trả về true, chưa insert vào DB
-        return true;
+    public function datLichKham($maBS, $ngay, $gio, $nguyenNhan, $maBN) {
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $url = "http://localhost:8080/api/v1/appointments/create";
+
+        $data = [
+            "ngayKham"   => $ngay,
+            "maBenhNhan" => $maBN,
+            "maBacSi"    => $maBS,
+            "gioKham"    => $gio,
+            "ghiChu"     => $nguyenNhan
+        ];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "Authorization: Bearer {$token}",
+            "Accept: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            $err = curl_error($ch);
+            curl_close($ch);
+            return [
+                "status" => 0,
+                "error"  => $err
+            ];
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Giải mã JSON trả về thành mảng PHP
+        $respArray = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [
+                "status" => $httpCode,
+                "error"  => "JSON Decode Error: " . json_last_error_msg(),
+                "raw"    => $response
+            ];
+        }
+
+        return [
+            "status"   => $httpCode,
+            "response" => $respArray
+        ];
     }
+
 
     public function layLichKhamChuaXacNhan($ngay = '') {
         if (empty($ngay)) {

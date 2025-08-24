@@ -9,39 +9,110 @@ class LichKhamController {
     }
 
     public function datLichPage() {
-        $dsChuyenKhoa = $this->model->layDanhSachChuyenKhoa();
+        // Gọi model lấy danh sách chuyên khoa từ API
+        $result = $this->model->layDanhSachChuyenKhoa();
+
+        // Nếu có lỗi, hiển thị mảng rỗng để dropdown không bị lỗi
+        if (isset($result['error'])) {
+            $dsChuyenKhoa = [];
+            $errorMsg = $result['error'];
+            echo "<div class='alert alert-warning'>Lỗi khi tải danh sách chuyên khoa: {$errorMsg}</div>";
+        } else {
+            $dsChuyenKhoa = $result; // dữ liệu trả về từ API
+        }
+
+        // Xác định mã bệnh nhân
+        if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BENHNHAN') {
+            $maBN = $_SESSION['user']['id'];
+        } else {
+            // Nếu là bác sĩ hoặc admin, bạn có thể truyền từ request hoặc để rỗng
+            $maBN = $_GET['maBN'] ?? '';
+        }
+
         $VIEW = './views/LichKham/DatLichKham.php';
         include './template/Template.php';
     }
 
+
     public function layBacSiTheoKhoa() {
-        $maKhoa = $_POST['maKhoa'] ?? '';
+        $maKhoa = $_GET['maKhoa'] ?? '';
+
+        if (!$maKhoa) {
+            echo json_encode(['error' => 'Mã khoa không hợp lệ']);
+            return;
+        }
+
         $bacSiList = $this->model->layDanhSachBacSiTheoKhoa($maKhoa);
+
+        // Nếu API trả về lỗi, giữ nguyên lỗi
+        if (isset($bacSiList['error'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => $bacSiList['error']]);
+            return;
+        }
+
+        // Trả về dữ liệu bác sĩ
         header('Content-Type: application/json');
         echo json_encode($bacSiList);
     }
 
+
     public function layCaKhamTheoBacSi() {
-        $maBS = $_POST['maBS'] ?? '';
+        // Lấy mã bác sĩ từ POST hoặc GET
+        $maBS = $_GET['maBS'] ?? '';
+
+        if (!$maBS) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Mã bác sĩ không hợp lệ']);
+            return;
+        }
+
+        // Gọi model lấy danh sách ca khám
         $caList = $this->model->layDanhSachCaKhamTheoBacSi($maBS);
+
         header('Content-Type: application/json');
+
+        // Nếu có lỗi từ model
+        if (isset($caList['error'])) {
+            echo json_encode(['error' => $caList['error']]);
+            return;
+        }
+
+        // Trả về dữ liệu ca khám
         echo json_encode($caList);
     }
 
     public function datLichKham() {
-        $maBS        = $_POST['maBS'] ?? '';
-        $ngay        = $_POST['ngay'] ?? '';
-        $gio         = $_POST['gio'] ?? '';
-        $nguyenNhan  = $_POST['nguyen_nhan'] ?? '';
-        $nguoiDK     = $_SESSION['user_id'] ?? '';
+        // Lấy dữ liệu từ form (camelCase)
+        $maBS       = $_POST['bacSi'] ?? '';
+        $ngay       = $_POST['ngayKham'] ?? '';
+        $gio        = $_POST['gioKham'] ?? '';
+        $nguyenNhan = $_POST['nguyenNhan'] ?? '';
+        $maBN       = $_POST['maBenhNhan'] ?? ''; 
 
-        $ketQua = $this->model->datLichKham($maBS, $ngay, $gio, $nguyenNhan, $nguoiDK);
+        // Gọi model để đặt lịch
+        $result = $this->model->datLichKham($maBS, $ngay, $gio, $nguyenNhan, $maBN);
 
-        $thongBao = $ketQua ? "✅ Đặt lịch khám thành công!" : "❌ Đặt lịch thất bại. Vui lòng thử lại!";
+        // Xử lý kết quả và alert
+        if (!empty($result['error'])) {
+            $thongBao = "❌ Lỗi khi đặt lịch: " . htmlspecialchars($result['error']);
+        } 
+        echo "<script>alert('{$thongBao}');</script>";
+
+        // Load lại danh sách chuyên khoa để hiển thị form
         $dsChuyenKhoa = $this->model->layDanhSachChuyenKhoa();
+
+        // Xác định mã bệnh nhân hiển thị trên form
+        if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BENHNHAN') {
+            $maBN = $_SESSION['user']['id']; // readonly
+        } else {
+            $maBN = $_POST['maBenhNhan'] ?? ''; // admin/tiếp tân có thể nhập
+        }
+
         $VIEW = './views/LichKham/DatLichKham.php';
         include './template/Template.php';
     }
+
 
     public function xacNhanLichPage() {
         $ngay = $_GET['ngay'] ?? '';

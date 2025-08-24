@@ -1,33 +1,34 @@
-<div class="container my-4" style="max-width: 900px;">
+<div class="container my-4" style="max-width: 95%;">
     <h2 class="text-primary mb-4">💊 Tra cứu đơn thuốc</h2>
 
     <form id="searchDonThuocForm" class="row g-3 mb-4" method="post" 
           action="index.php?controller=donthuoc&action=tracuu">
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="maDT" class="form-label">Mã đơn thuốc:</label>
             <input type="text" id="maDT" name="maDT" class="form-control">
         </div>
 
-        <div class="col-md-4">
-            <label for="tenBN" class="form-label">Mã bệnh nhân:</label>
+        <div class="col-md-3">
+            <label for="maBN" class="form-label">Mã bệnh nhân:</label>
             <input type="text" id="maBN" name="maBN" class="form-control">
         </div>
 
         <div class="col-md-4">
-            <label class="form-label d-block">Ngày</label>
             <div class="row g-2">
                 <div class="col-6">
-                    <input type="date" id="tuNgay" name="tuNgay" class="form-control" placeholder="Từ ngày">
+                    <label for="tuNgay" class="form-label small">Từ ngày</label>
+                    <input type="date" id="tuNgay" name="tuNgay" class="form-control">
                 </div>
                 <div class="col-6">
-                    <input type="date" id="denNgay" name="denNgay" class="form-control" placeholder="Đến ngày">
+                    <label for="denNgay" class="form-label small">Đến ngày</label>
+                    <input type="date" id="denNgay" name="denNgay" class="form-control">
                 </div>
             </div>
         </div>
 
-        <div class="col-12 text-end">
-            <button type="button" id="btnSearchDonThuoc" class="btn btn-primary">🔍 Tìm kiếm</button>
+        <div class="col-md-2 text-end d-flex align-items-end">
+            <button type="button" id="btnSearchDonThuoc" class="btn btn-primary w-100">🔍 Tìm kiếm</button>
         </div>
     </form>
 
@@ -63,7 +64,7 @@ $(document).ready(function () {
 
     $('#btnSearchDonThuoc').click(() => search());
 
-    $('#maDT, #tenBN, #tuNgay, #denNgay').keyup(function (e) {
+    $('#maDT, #maBN, #tuNgay, #denNgay').keyup(function (e) {
         if (e.keyCode === 13) search();
     });
 

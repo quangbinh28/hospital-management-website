@@ -1,5 +1,7 @@
 <?php
 require_once 'models/HoSoBenhAnModel.php';
+require_once 'models/BenhNhanModel.php';
+
 
 class HoSoBenhAnController {
     private $model;
@@ -12,7 +14,8 @@ class HoSoBenhAnController {
      * Hiển thị form thêm hồ sơ mới cho bệnh nhân
      */
     public function them($maBN) {
-        $benhNhan = $this->model->getBenhNhanById($maBN);
+        $benhNhanModel = new BenhNhanModel();
+        $benhNhan = $benhNhanModel->layThongTinBenhNhan($maBN);
         if (!$benhNhan) {
             echo "<div class='alert alert-danger'>Không tìm thấy bệnh nhân</div>";
             return;
@@ -28,14 +31,14 @@ class HoSoBenhAnController {
      */
     public function luu() {
         $data = [
-            'MaBN' => $_POST['MaBN'],
-            'ChanDoanBanDau' => $_POST['ChanDoanBanDau'],
-            'TrieuChung' => $_POST['TrieuChung'],
-            'GhiChu' => $_POST['GhiChu'],
-            'MaBS' => $_SESSION['MaTaiKhoan'],
+            'maBenhNhan' => $_POST['maBenhNhan'],
+            'chanDoan' => $_POST['chanDoan'],
+            'trieuChung' => $_POST['trieuChung'],
+            'ghiChu' => $_POST['ghiChu'],
+            'maBacSi' => $_SESSION['user']['id'],
         ];
 
-        $this->model->insertHoSo($data);
+        $this->model->taoHoSo($data);
 
         header('Location: index.php?controller=benhnhan&action=chitiet&id=' . $_POST['MaBN']);
     }

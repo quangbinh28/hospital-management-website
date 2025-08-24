@@ -97,16 +97,90 @@ class DonThuocModel {
 
 
     public function layChiTietDonThuoc($maDT) {
-        // Demo dữ liệu
+        $url = "http://localhost:8080/api/v1/prescriptions/details/" . urlencode($maDT);
+
+        // Lấy token từ session
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json",
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            return [
+                'error' => "cURL Error: {$error}"
+            ];
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [
+                'status' => $httpCode,
+                'error'  => "JSON Decode Error: " . json_last_error_msg(),
+                'raw'    => $response,
+            ];
+        }
+
         return [
-            'MaDT' => $maDT,
-            'TenBN' => 'Nguyễn Văn A',
-            'NgayLap' => '2025-08-01',
-            'TinhTrang' => 'Đã cấp',
-            'Thuoc' => [
-                ['TenThuoc' => 'Paracetamol', 'SoLuong' => 10, 'LieuLuong' => '500mg', 'ChiDinh' => '5 vien/ ngay'],
-                ['TenThuoc' => 'Amoxicillin', 'SoLuong' => 20, 'LieuLuong' => '500mg', 'ChiDinh' => '5 vien/ ngay']
-            ]
+            'status' => $httpCode,
+            'data'   => $result
         ];
+    }
+
+    public function sanSang($maDT) {
+        $url = "http://localhost:8080/api/v1/prescriptions/ready/" . urlencode($maDT);
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT"); // Dùng PUT
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json",
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            return ['status' => $httpCode, 'data' => json_decode($response, true)];
+        } else {
+            return ['status' => $httpCode, 'error' => $response];
+        }
+    }
+
+    public function daLay($maDT) {
+        $url = "http://localhost:8080/api/v1/prescriptions/checkout/" . urlencode($maDT);
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT"); // Dùng PUT
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json",
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            return ['status' => $httpCode, 'data' => json_decode($response, true)];
+        } else {
+            return ['status' => $httpCode, 'error' => $response];
+        }
     }
 }

@@ -4,10 +4,11 @@
     <!-- Thông tin đơn thuốc -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <p><strong>Mã đơn thuốc:</strong> <?= htmlspecialchars($donThuoc['MaDT']) ?></p>
-            <p><strong>Tên bệnh nhân:</strong> <?= htmlspecialchars($donThuoc['TenBN']) ?></p>
-            <p><strong>Ngày lập:</strong> <?= htmlspecialchars($donThuoc['NgayLap']) ?></p>
-            <p><strong>Tình trạng:</strong> <?= htmlspecialchars($donThuoc['TinhTrang']) ?></p>
+            <p><strong>Mã đơn thuốc:</strong> <?= htmlspecialchars($maDT) ?></p>
+            <p><strong>Mã bệnh nhân:</strong> <?= htmlspecialchars($donThuoc['maBenhNhan']) ?></p>
+            <p><strong>Mã bệnh nhân:</strong> <?= htmlspecialchars($donThuoc['maBacSi']) ?></p>
+            <p><strong>Ngày cấp:</strong> <?= htmlspecialchars($donThuoc['ngayCap']) ?></p>
+            <p><strong>Tình trạng:</strong> <?= htmlspecialchars($donThuoc['tinhTrang']) ?></p>
         </div>
     </div>
 
@@ -20,16 +21,14 @@
                     <th>Tên thuốc</th>
                     <th class="text-center">Số lượng</th>
                     <th class="text-center">Liều lượng</th>
-                    <th>Chỉ định</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($donThuoc['Thuoc'] as $t): ?>
+                <?php foreach ($donThuoc['prescriptionDetails'] as $t): ?>
                     <tr>
-                        <td><?= htmlspecialchars($t['TenThuoc']) ?></td>
-                        <td class="text-center"><?= htmlspecialchars($t['SoLuong']) ?></td>
-                        <td class="text-center"><?= htmlspecialchars($t['LieuLuong']) ?></td>
-                        <td><?= htmlspecialchars($t['ChiDinh']) ?></td>
+                        <td><?= htmlspecialchars($t['tenThuoc']) ?></td>
+                        <td class="text-center"><?= htmlspecialchars($t['soLuong']) ?></td>
+                        <td><?= htmlspecialchars($t['chiDinh']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
