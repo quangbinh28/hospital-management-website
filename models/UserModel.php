@@ -33,16 +33,20 @@ class UserModel {
             $_SESSION['accessToken']  = $data['accessToken'];
             $_SESSION['refreshToken'] = $data['refreshToken'];
             $_SESSION['user'] = $payload;
+            $_SESSION['user']['sub']  = $payload['role'];
             $_SESSION['IsLogined'] = true;
             $_SESSION['user']['ten']  = $data['username'];
             $_SESSION['user']['id']  = $data['id'];
 
             // ✅ chuyển hướng sang trang mong muốn
-            header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=benhnhan&action=timkiempage");
+            header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=trangchu&action=trangchupage");
             exit(); 
         }
 
         $_SESSION['IsLogined'] = false;
+    
+        echo "<script> alert('Lỗi: {$result['error']}'); </script>";
+        header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=auth&action=loginpage");
         return [
             "success" => false,
             "error" => "Login failed"

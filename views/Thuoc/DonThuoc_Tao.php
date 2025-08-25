@@ -4,11 +4,14 @@
     <form id="taoDonThuocForm" class="row g-3 mb-4" method="post" 
           action="index.php?controller=donthuoc&action=luu">
 
-        <!-- Thông tin bệnh nhân -->
-        <div class="col-md-4">
-            <label for="maBN" class="form-label">Mã bệnh nhân:</label>
-            <input type="text" id="maBN" name="maBN" class="form-control" required>
-        </div>
+    <!-- Thông tin bệnh nhân -->
+    <div class="col-md-4">
+        <label for="maBN" class="form-label">Mã bệnh nhân:</label>
+        <input type="text" id="maBN" name="maBN" class="form-control"
+            value="<?= htmlspecialchars($maBN ?? '') ?>"
+            <?= !empty($maBN) ? 'readonly' : '' ?>
+            placeholder="VD: BN-250818QESRHVJ" required>
+    </div>
 
         <!-- Danh sách thuốc -->
         <div class="col-12">

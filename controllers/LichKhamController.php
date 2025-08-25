@@ -93,6 +93,7 @@ class LichKhamController {
         // Gọi model để đặt lịch
         $result = $this->model->datLichKham($maBS, $ngay, $gio, $nguyenNhan, $maBN);
 
+        $thongBao = "Đặt lịch thành công";
         // Xử lý kết quả và alert
         if (!empty($result['error'])) {
             $thongBao = "❌ Lỗi khi đặt lịch: " . htmlspecialchars($result['error']);
@@ -200,31 +201,5 @@ class LichKhamController {
                 window.location.href = 'index.php?controller=lichkham&action=tracuu';
             </script>";
         }
-    }
-
-
-    /**
-     * Xem lịch khám đã xác nhận của người dùng đang đăng nhập
-     */
-    public function xemLichKham() {
-        // $maTaiKhoan = $_SESSION['MaTaiKhoan'] ?? null;
-        $maTaiKhoan = 'BN123';
-        if (!$maTaiKhoan) {
-            echo "Vui lòng đăng nhập để xem lịch khám.";
-            return;
-        }
-        
-
-        require_once 'models/LichKhamModel.php';
-        $model = new LichKhamModel();
-
-        // Nếu có bộ lọc thời gian
-        $tuNgay = $_POST['tu_ngay'] ?? null;
-        $denNgay = $_POST['den_ngay'] ?? null;
-
-        $lichKham = $model->layDanhSachLichKham();
-
-        $VIEW = './views/LichKham/XemLichKham.php';
-        include './template/Template.php';
     }
 }

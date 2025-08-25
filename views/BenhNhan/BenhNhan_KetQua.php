@@ -16,10 +16,18 @@
                 <th>Ngày sinh</th>
                 <th>Giới tính</th>
                 <th>Điện thoại</th>
-                <th>Chi tiết</th>
+
+                <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BACSI'): ?>
+                    <th>Chi tiết</th>
+                <?php endif; ?>
+
                 <?php if (isset($_SESSION['user']['sub']) && 
                         ($_SESSION['user']['sub'] === 'TIEPTAN' || $_SESSION['user']['sub'] === 'ADMIN')): ?>
                     <th>Hành động</th>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BACSI'): ?>
+                    <th>Đơn thuốc</th>
                 <?php endif; ?>
             </tr>
         </thead>
@@ -31,23 +39,28 @@
                     <td><?= htmlspecialchars($bn['ngaySinh'] ?? '') ?></td>
                     <td><?= htmlspecialchars($bn['gioiTinh'] ?? '') ?></td>
                     <td><?= htmlspecialchars($bn['soDienThoai'] ?? '') ?></td>
-                    <td>
-                        <a href="index.php?controller=benhnhan&action=chitiet&id=<?= urlencode($bn['maBenhNhan'] ?? '') ?>"
-                           class="btn btn-sm btn-info">
-                            Xem
-                        </a>
-                        <a href="index.php?controller=hoso&action=them&maBN=<?= urlencode($bn['maBenhNhan'] ?? '') ?>"
-                           class="btn btn-sm btn-success">
-                            Thêm bệnh án
-                        </a>
-                    </td>
+
+                    <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BACSI'): ?>
+                        <td>
+                            <a href="index.php?controller=benhnhan&action=chitiet&id=<?= urlencode($bn['maBenhNhan'] ?? '') ?>"
+                               class="btn btn-sm btn-info">Xem</a>
+                            <a href="index.php?controller=hoso&action=them&maBN=<?= urlencode($bn['maBenhNhan'] ?? '') ?>"
+                               class="btn btn-sm btn-success">Thêm bệnh án</a>
+                        </td>
+                    <?php endif; ?>
+
                     <?php if (isset($_SESSION['user']['sub']) && 
                             ($_SESSION['user']['sub'] === 'TIEPTAN' || $_SESSION['user']['sub'] === 'ADMIN')): ?>
                         <td>
                             <a href="index.php?controller=lichkham&action=datlichpage&maBN=<?= urlencode($bn['maBenhNhan'] ?? '') ?>"
-                               class="btn btn-sm btn-primary">
-                               Đặt lịch khám
-                            </a>
+                               class="btn btn-sm btn-primary">Đặt lịch khám</a>
+                        </td>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BACSI'): ?>
+                        <td>
+                            <a href="index.php?controller=donthuoc&action=taopage&maBN=<?= urlencode($bn['maBenhNhan'] ?? '') ?>"
+                               class="btn btn-sm btn-warning">Tạo đơn thuốc</a>
                         </td>
                     <?php endif; ?>
                 </tr>

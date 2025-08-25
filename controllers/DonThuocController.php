@@ -10,6 +10,7 @@ class DonThuocController {
     }
 
     public function taoPage() {
+        $maBN = $_GET['maBN'] ?? ''; // lấy mã bệnh nhân từ URL
         $VIEW = './views/Thuoc/DonThuoc_Tao.php';
         include './template/Template.php';
     }

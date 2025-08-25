@@ -136,7 +136,6 @@ class BenhNhanModel {
      * Thêm bệnh nhân
      */
     public function themBenhNhan($data) {
-        // TODO: Thêm logic lấy kết quả khám
         return [];
     }
 }

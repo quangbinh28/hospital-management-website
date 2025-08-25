@@ -92,7 +92,8 @@ class LichKhamModel {
 
 
     public function layDanhSachCaKhamTheoBacSi($maBS) {
-        $url = "http://localhost:8080/api/v1/schedules/" . urlencode($maBS);
+        $url = "http://localhost:8080/api/v1/schedules/doctor/" . urlencode($maBS);
+
         $token = $_SESSION['accessToken'] ?? '';
 
         $ch = curl_init($url);
@@ -124,7 +125,6 @@ class LichKhamModel {
         $token = $_SESSION['accessToken'] ?? '';
 
         $url = "http://localhost:8080/api/v1/appointments/create";
-
         $data = [
             "ngayKham"   => $ngay,
             "maBenhNhan" => $maBN,
@@ -132,6 +132,16 @@ class LichKhamModel {
             "gioKham"    => $gio,
             "ghiChu"     => $nguyenNhan
         ];
+
+        if ($_SESSION['user']['sub'] == 'BENHNHAN') {
+            $url = "http://localhost:8080/api/v1/appointments/book";
+            $data = [
+                "ngayKham"   => $ngay,
+                "maBacSi"    => $maBS,
+                "gioKham"    => $gio,
+                "ghiChu"     => $nguyenNhan
+            ];
+        }
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -233,6 +243,10 @@ class LichKhamModel {
         $token = $_SESSION['accessToken'] ?? '';
 
         $url = "http://localhost:8080/api/v1/appointments/search";
+    
+        if ($_SESSION['user']['sub'] == 'BENHNHAN') {
+            $url = "http://localhost:8080/api/v1/appointments/my-appointments";
+        }
 
         // Chỉ giữ các param không rỗng
         $params = array_filter([

@@ -2,33 +2,18 @@
 session_start();
 
 // Lấy controller và action từ URL, mặc định vào tìm kiếm bệnh nhân
-$controller = strtolower($_GET['controller'] ?? 'benhnhan');
-$action     = strtolower($_GET['action'] ?? 'timkiempage');
+$controller = strtolower($_GET['controller'] ?? 'trangchu');
+$action     = strtolower($_GET['action'] ?? 'trangchupage');
 
 switch ($controller) {
     case 'trangchu':
         require_once 'controllers/TrangChuController.php';
         $ctrl = new TrangChuController();
 
-        if ($action === 'index') {
-            $ctrl->index();
+        if ($action === 'trangchupage') {
+            $ctrl->trangChuPage();
         } else {
             echo "❌ Không tìm thấy action [$action] trong TrangChuController";
-        }
-        break;
-
-    case 'xacthuc':
-        require_once 'controllers/XacThucController.php';
-        $ctrl = new XacThucController();
-
-        if ($action === 'dangnhap') {
-            $ctrl->dangNhap();
-        } elseif ($action === 'xulydangnhap') {
-            $ctrl->xuLyDangNhap();
-        } elseif ($action === 'dangxuat') {
-            $ctrl->dangXuat();
-        } else {
-            echo "❌ Không tìm thấy action [$action] trong XacThucController";
         }
         break;
 
@@ -115,8 +100,6 @@ switch ($controller) {
             $ctrl->xacNhanLich($_GET['maLich']);
         } elseif ($action === 'huylich' && isset($_GET['maLich'])) {
             $ctrl->huyLich($_GET['maLich']);
-        } elseif ($action === 'xem') {
-            $ctrl->xemLichKham();
         } else {
             echo "❌ Không tìm thấy action [$action] trong LichKhamController";
         }

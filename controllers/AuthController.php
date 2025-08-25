@@ -17,7 +17,7 @@ class AuthController {
         $password = $_POST['password'] ?? '';
 
         $userModel = new UserModel();
-        $user = $userModel->handleLogin($username, $password);
+        $result = $userModel->handleLogin($username, $password);
     }
 
     public function handleRegister() {

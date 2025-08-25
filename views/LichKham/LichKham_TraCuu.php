@@ -1,4 +1,9 @@
 <!-- views/LichKham/LichKham_TraCuu.php -->
+<?php
+$userRole = $_SESSION['user']['sub'] ?? '';
+$userId   = $_SESSION['user']['id'] ?? '';
+?>
+
 <div class="container my-4" style="max-width: 95%;">
     <h2 class="text-primary mb-4">📋 Tra cứu lịch khám</h2>
 
@@ -8,22 +13,38 @@
         <div class="col-md-3">
             <label for="maBS" class="form-label">Mã bác sĩ:</label>
             <input type="text" id="maBS" name="maBS" class="form-control"
-                   value="<?= htmlspecialchars($_POST['maBS'] ?? '') ?>" placeholder="VD: BS-2508114ROHDGI">
+                   value="<?php
+                       if ($userRole === 'BACSI') {
+                           echo htmlspecialchars($userId);
+                       } else {
+                           echo htmlspecialchars($_POST['maBS'] ?? '');
+                       }
+                   ?>"
+                   placeholder="VD: BS-2508114ROHDGI"
+                   <?= $userRole === 'BACSI' ? 'readonly' : '' ?>>
         </div>
 
         <div class="col-md-3">
             <label for="maBN" class="form-label">Mã bệnh nhân:</label>
             <input type="text" id="maBN" name="maBN" class="form-control"
-                   value="<?= htmlspecialchars($_POST['maBN'] ?? '') ?>" placeholder="VD: BN-250818QESRHVJ">
+                   value="<?php
+                       if ($userRole === 'BENHNHAN') {
+                           echo htmlspecialchars($userId);
+                       } else {
+                           echo htmlspecialchars($_POST['maBN'] ?? '');
+                       }
+                   ?>"
+                   placeholder="VD: BN-250818QESRHVJ"
+                   <?= $userRole === 'BENHNHAN' ? 'readonly' : '' ?>>
         </div>
 
         <div class="col-md-3">
-            <label for="tỉnhTrang" class="form-label">Trạng thái:</label>
-            <select id="tỉnhTrang" name="tinhTrang" class="form-select">
+            <label for="tinhTrang" class="form-label">Trạng thái:</label>
+            <select id="tinhTrang" name="tinhTrang" class="form-select">
                 <option value="">-- Chọn trạng thái --</option>
-                <option value="DA_DAT" <?= (($_POST['trangThai'] ?? '') === 'DA_DAT') ? 'selected' : '' ?>>ĐÃ ĐẶT</option>
-                <option value="DA_THANH_TOAN" <?= (($_POST['trangThai'] ?? '') === 'DA_THANH_TOAN') ? 'selected' : '' ?>>ĐÃ THANH TOÁN</option>
-                <option value="DA_HUY" <?= (($_POST['trangThai'] ?? '') === 'DA_HUY') ? 'selected' : '' ?>>ĐÃ HỦY</option>
+                <option value="DA_DAT" <?= (($_POST['tinhTrang'] ?? '') === 'DA_DAT') ? 'selected' : '' ?>>ĐÃ ĐẶT</option>
+                <option value="DA_THANH_TOAN" <?= (($_POST['tinhTrang'] ?? '') === 'DA_THANH_TOAN') ? 'selected' : '' ?>>ĐÃ THANH TOÁN</option>
+                <option value="DA_HUY" <?= (($_POST['tinhTrang'] ?? '') === 'DA_HUY') ? 'selected' : '' ?>>ĐÃ HỦY</option>
             </select>
         </div>
 
@@ -79,7 +100,7 @@ $(document).ready(function () {
     $('#btnSearchLichKham').click(() => search());
 
     // Enter để search hoặc đổi trạng thái thì search luôn
-    $('#maBS, #maBN, #ngayTu, #ngayDen, #trangThai').on('keyup change', function (e) {
+    $('#maBS, #maBN, #ngayTu, #ngayDen, #tinhTrang').on('keyup change', function (e) {
         if (e.keyCode === 13 || e.type === 'change') search();
     });
 

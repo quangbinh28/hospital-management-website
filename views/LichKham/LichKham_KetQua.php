@@ -30,16 +30,22 @@
                     <td><?= htmlspecialchars($lich['gioKham'] ?? '') ?></td>
                     <td class="status"><?= htmlspecialchars($lich['tinhTrang'] ?? '') ?></td>
                     <td>
+                        <!-- Ẩn mã bệnh nhân -->
+                        <input type="hidden" name="maBenhNhan" value="<?= htmlspecialchars($lich['maBenhNhan'] ?? '') ?>">
+
                         <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'TIEPTAN'): ?>
                             <a href="index.php?controller=lichkham&action=xacnhanlich&maLich=<?= urlencode($lich['maLichKham']) ?>&status=xacnhan" 
-                            class="btn btn-sm btn-success mb-1">✅ Xác nhận</a>
+                               class="btn btn-sm btn-success mb-1">✅ Xác nhận</a>
 
                             <a href="index.php?controller=lichkham&action=huylich&maLich=<?= urlencode($lich['maLichKham']) ?>&status=huy" 
-                            class="btn btn-sm btn-danger mb-1">❌ Hủy</a>
+                               class="btn btn-sm btn-danger mb-1">❌ Hủy</a>
+                        <?php endif; ?>
+
+                        <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BACSI'): ?>
+                            <a href="index.php?controller=donthuoc&action=taoPage&maBN=<?= urlencode($lich['maBenhNhan'] ?? '') ?>" 
+                               class="btn btn-sm btn-primary mb-1">💊 Tạo đơn thuốc</a>
                         <?php endif; ?>
                     </td>
-
-
                 </tr>
             <?php endforeach; ?>
         </tbody>
