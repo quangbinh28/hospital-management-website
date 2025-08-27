@@ -25,12 +25,11 @@
                 <tr id="row-<?= htmlspecialchars($lich['maLichKham']) ?>">
                     <td><?= htmlspecialchars($lich['maLichKham'] ?? '') ?></td>
                     <td><?= htmlspecialchars($lich['tenBenhNhan'] ?? '') ?></td>
-                    <td><?= htmlspecialchars($lich['bacSi'] ?? '') ?></td>
+                    <td><?= htmlspecialchars($lich['tenBacSi'] ?? '') ?></td>
                     <td><?= htmlspecialchars($lich['ngayKham'] ?? '') ?></td>
                     <td><?= htmlspecialchars($lich['gioKham'] ?? '') ?></td>
                     <td class="status"><?= htmlspecialchars($lich['tinhTrang'] ?? '') ?></td>
                     <td>
-                        <!-- Ẩn mã bệnh nhân -->
                         <input type="hidden" name="maBenhNhan" value="<?= htmlspecialchars($lich['maBenhNhan'] ?? '') ?>">
 
                         <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'TIEPTAN'): ?>
@@ -43,7 +42,13 @@
 
                         <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BACSI'): ?>
                             <a href="index.php?controller=donthuoc&action=taoPage&maBN=<?= urlencode($lich['maBenhNhan'] ?? '') ?>" 
-                               class="btn btn-sm btn-primary mb-1">💊 Tạo đơn thuốc</a>
+                               class="btn btn-sm btn-primary mb-1">Tạo đơn thuốc</a>
+
+                            <a href="index.php?controller=benhnhan&action=chitiet&id=<?= urlencode($lich['maBenhNhan'] ?? '') ?>"
+                               class="btn btn-sm btn-info mb-1">Xem thông tin bệnh nhân</a>
+
+                            <a href="index.php?controller=lichkham&action=chidinhdichvupage&maLich=<?= urlencode($lich['maLichKham'] ?? '') ?>&tenBenhNhan=<?= urlencode($lich['tenBenhNhan'] ?? '') ?> "
+                               class="btn btn-sm btn-warning">Chỉ định dịch vụ</a>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -51,10 +56,11 @@
         </tbody>
     </table>
 
-    <!-- PHÂN TRANG -->
+
     <?php if (!empty($totalPages) && $totalPages > 1): ?>
         <nav>
             <ul class="pagination justify-content-center">
+
                 <!-- Nút Prev -->
                 <?php if ($currentPage > 1): ?>
                     <li class="page-item">
@@ -62,12 +68,33 @@
                     </li>
                 <?php endif; ?>
 
-                <!-- Các số trang -->
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <?php
+                $range = 2; // số trang hiển thị trước và sau trang hiện tại
+                $start = max(1, $currentPage - $range);
+                $end = min($totalPages, $currentPage + $range);
+
+                // Hiển thị trang đầu
+                if ($start > 1) {
+                    echo '<li class="page-item"><a href="#" class="page-link page-btn" data-page="1">1</a></li>';
+                    if ($start > 2) {
+                        echo '<li class="page-item disabled"><span class="page-link">…</span></li>';
+                    }
+                }
+
+                // Các trang chính giữa
+                for ($i = $start; $i <= $end; $i++): ?>
                     <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
                         <a href="#" class="page-link page-btn" data-page="<?= $i ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
+                <?php
+                if ($end < $totalPages) {
+                    if ($end < $totalPages - 1) {
+                        echo '<li class="page-item disabled"><span class="page-link">…</span></li>';
+                    }
+                    echo '<li class="page-item"><a href="#" class="page-link page-btn" data-page="' . $totalPages . '">' . $totalPages . '</a></li>';
+                }
+                ?>
 
                 <!-- Nút Next -->
                 <?php if ($currentPage < $totalPages): ?>
@@ -75,6 +102,7 @@
                         <a href="#" class="page-link page-btn" data-page="<?= $currentPage + 1 ?>">»</a>
                     </li>
                 <?php endif; ?>
+
             </ul>
         </nav>
     <?php endif; ?>

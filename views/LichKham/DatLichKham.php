@@ -1,12 +1,14 @@
 <div class="container mt-4">
     <h2 class="mb-4 text-primary">📅 Đặt Lịch Khám</h2>
 
-    <form method="post" action="index.php?controller=lichkham&action=datLichKham" class="border p-4 rounded shadow-sm bg-light">
+    <form method="post" action="index.php?controller=lichkham&action=datLichKham" 
+          class="border p-4 rounded shadow-sm bg-light">
+        
         <!-- Mã bệnh nhân (readonly) -->
         <div class="mb-3">
             <label for="maBenhNhan" class="form-label">Mã bệnh nhân</label>
             <input type="text" name="maBenhNhan" id="maBenhNhan" class="form-control" 
-                value="<?= htmlspecialchars($maBN ?? '') ?>" readonly>
+                   value="<?= htmlspecialchars($maBN ?? '') ?>" readonly>
         </div>
 
         <!-- Chuyên khoa -->
@@ -46,6 +48,13 @@
             </select>
         </div>
 
+        <!-- Phòng khám (readonly) -->
+        <div class="mb-3">
+            <label for="phong" class="form-label">Phòng khám</label>
+            <input type="text" name="phong" id="phong" 
+                   class="form-control" readonly placeholder="Sẽ tự động hiển thị">
+        </div>
+
         <!-- Nguyên nhân -->
         <div class="mb-3">
             <label for="nguyenNhan" class="form-label">Nguyên nhân khám</label>
@@ -65,10 +74,14 @@ const chuyenKhoaSelect = document.getElementById('chuyenKhoa');
 const bacSiSelect = document.getElementById('bacSi');
 const ngayKhamSelect = document.getElementById('ngayKham');
 const gioKhamSelect = document.getElementById('gioKham');
+const phongInput = document.getElementById('phong');
 
 chuyenKhoaSelect.addEventListener('change', function () {
     let maKhoa = this.value;
     bacSiSelect.innerHTML = '<option value="">-- Đang tải bác sĩ --</option>';
+    ngayKhamSelect.innerHTML = '<option value="">-- Chọn ngày --</option>';
+    gioKhamSelect.innerHTML = '<option value="">-- Chọn giờ --</option>';
+    phongInput.value = '';
 
     fetch('index.php?controller=lichkham&action=layBacSiTheoKhoa&maKhoa=' + maKhoa)
         .then(res => res.json())
@@ -88,6 +101,7 @@ bacSiSelect.addEventListener('change', function () {
         .then(data => {
             ngayKhamSelect.innerHTML = '<option value="">-- Chọn ngày --</option>';
             gioKhamSelect.innerHTML = '<option value="">-- Chọn giờ --</option>';
+            phongInput.value = '';
 
             const lichLamViec = data.lichLamViec || [];
             const ngaySet = [...new Set(lichLamViec.map(item => item.ngayLamViec))];
@@ -96,9 +110,13 @@ bacSiSelect.addEventListener('change', function () {
                 ngayKhamSelect.innerHTML += `<option value="${ngay}">${ngay}</option>`;
             });
 
+            // mapping giờ -> phòng
+            const gioPhongMap = {};
+
             ngayKhamSelect.addEventListener('change', function () {
                 const ngayChon = this.value;
                 gioKhamSelect.innerHTML = '<option value="">-- Chọn giờ --</option>';
+                phongInput.value = '';
 
                 const caTrongNgay = lichLamViec.filter(ca => ca.ngayLamViec === ngayChon);
 
@@ -113,10 +131,19 @@ bacSiSelect.addEventListener('change', function () {
                         let hh = String(startDate.getHours()).padStart(2,'0');
                         let mm = String(startDate.getMinutes()).padStart(2,'0');
                         let value = `${hh}:${mm}`;
+
                         gioKhamSelect.innerHTML += `<option value="${value}">${value}</option>`;
+                        gioPhongMap[value] = ca.phong; // gắn phòng cho giờ này
+
                         startDate.setMinutes(startDate.getMinutes() + 30);
                     }
                 });
+            });
+
+            // Khi chọn giờ -> tự động hiển thị phòng
+            gioKhamSelect.addEventListener('change', function () {
+                const gioChon = this.value;
+                phongInput.value = gioPhongMap[gioChon] || '';
             });
         });
 });

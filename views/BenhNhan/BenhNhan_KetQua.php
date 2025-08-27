@@ -68,27 +68,54 @@
         </tbody>
     </table>
 
-    <!-- PHÂN TRANG -->
+    <!-- PHÂN TRANG THÔNG MINH -->
     <?php if (!empty($totalPages) && $totalPages > 1): ?>
         <nav>
             <ul class="pagination justify-content-center">
+
+                <!-- Nút Prev -->
                 <?php if ($currentPage > 1): ?>
                     <li class="page-item">
                         <a href="#" class="page-link page-btn" data-page="<?= $currentPage - 1 ?>">«</a>
                     </li>
                 <?php endif; ?>
 
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <?php
+                $range = 2; // số trang hiển thị trước và sau trang hiện tại
+                $start = max(1, $currentPage - $range);
+                $end = min($totalPages, $currentPage + $range);
+
+                // Trang đầu
+                if ($start > 1) {
+                    echo '<li class="page-item"><a href="#" class="page-link page-btn" data-page="1">1</a></li>';
+                    if ($start > 2) {
+                        echo '<li class="page-item disabled"><span class="page-link">…</span></li>';
+                    }
+                }
+
+                // Các trang chính giữa
+                for ($i = $start; $i <= $end; $i++): ?>
                     <li class="page-item <?= $i == $currentPage ? 'active' : '' ?>">
                         <a href="#" class="page-link page-btn" data-page="<?= $i ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
 
+                <?php
+                if ($end < $totalPages) {
+                    if ($end < $totalPages - 1) {
+                        echo '<li class="page-item disabled"><span class="page-link">…</span></li>';
+                    }
+                    echo '<li class="page-item"><a href="#" class="page-link page-btn" data-page="' . $totalPages . '">' . $totalPages . '</a></li>';
+                }
+                ?>
+
+                <!-- Nút Next -->
                 <?php if ($currentPage < $totalPages): ?>
                     <li class="page-item">
                         <a href="#" class="page-link page-btn" data-page="<?= $currentPage + 1 ?>">»</a>
                     </li>
                 <?php endif; ?>
+
             </ul>
         </nav>
     <?php endif; ?>
@@ -97,4 +124,4 @@
     <div class="alert alert-warning">
         Không tìm thấy bệnh nhân nào phù hợp.
     </div>
-<?php endif ?>
+<?php endif; ?>

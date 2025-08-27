@@ -2,6 +2,7 @@
 <?php
 $userRole = $_SESSION['user']['sub'] ?? '';
 $userId   = $_SESSION['user']['id'] ?? '';
+$today    = date('Y-m-d');
 ?>
 
 <div class="container my-4" style="max-width: 95%;">
@@ -40,12 +41,24 @@ $userId   = $_SESSION['user']['id'] ?? '';
 
         <div class="col-md-3">
             <label for="tinhTrang" class="form-label">Trạng thái:</label>
-            <select id="tinhTrang" name="tinhTrang" class="form-select">
+            <select id="tinhTrang" name="tinhTrang" class="form-select" <?= $userRole === 'BACSI' ? 'disabled' : '' ?>>
                 <option value="">-- Chọn trạng thái --</option>
-                <option value="DA_DAT" <?= (($_POST['tinhTrang'] ?? '') === 'DA_DAT') ? 'selected' : '' ?>>ĐÃ ĐẶT</option>
-                <option value="DA_THANH_TOAN" <?= (($_POST['tinhTrang'] ?? '') === 'DA_THANH_TOAN') ? 'selected' : '' ?>>ĐÃ THANH TOÁN</option>
-                <option value="DA_HUY" <?= (($_POST['tinhTrang'] ?? '') === 'DA_HUY') ? 'selected' : '' ?>>ĐÃ HỦY</option>
+                <option value="DA_DAT" 
+                    <?= ($userRole !== 'BACSI' && (($_POST['tinhTrang'] ?? '') === 'DA_DAT')) ? 'selected' : '' ?>>
+                    ĐÃ ĐẶT
+                </option>
+                <option value="DA_THANH_TOAN" 
+                    <?= ($userRole === 'BACSI' || (($_POST['tinhTrang'] ?? '') === 'DA_THANH_TOAN')) ? 'selected' : '' ?>>
+                    ĐÃ THANH TOÁN
+                </option>
+                <option value="DA_HUY" 
+                    <?= ($userRole !== 'BACSI' && (($_POST['tinhTrang'] ?? '') === 'DA_HUY')) ? 'selected' : '' ?>>
+                    ĐÃ HỦY
+                </option>
             </select>
+            <?php if ($userRole === 'BACSI'): ?>
+                <input type="hidden" name="tinhTrang" value="DA_THANH_TOAN">
+            <?php endif; ?>
         </div>
 
         <div class="col-md-3">
@@ -53,12 +66,12 @@ $userId   = $_SESSION['user']['id'] ?? '';
                 <div class="col-6">
                     <label for="ngayTu" class="form-label small">Từ ngày</label>
                     <input type="date" id="ngayTu" name="ngayTu" class="form-control"
-                           value="<?= htmlspecialchars($_POST['ngayTu'] ?? '') ?>">
+                           value="<?= htmlspecialchars($_POST['ngayTu'] ?? $today) ?>">
                 </div>
                 <div class="col-6">
                     <label for="ngayDen" class="form-label small">Đến ngày</label>
                     <input type="date" id="ngayDen" name="ngayDen" class="form-control"
-                           value="<?= htmlspecialchars($_POST['ngayDen'] ?? '') ?>">
+                           value="<?= htmlspecialchars($_POST['ngayDen'] ?? $today) ?>">
                 </div>
             </div>
         </div>

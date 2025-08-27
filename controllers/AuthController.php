@@ -23,15 +23,12 @@ class AuthController {
     public function handleRegister() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
-                "email"     => $_POST['EmailBN'] ?? '',
-                "password"  => $_POST['Password'] ?? '',
-                "maxacnhan" => $_POST['MaXacNhan'] ?? '',
-                "hoten"     => $_POST['HoTenBN'] ?? '',
-                "ngaysinh"  => $_POST['NgaySinhBN'] ?? '',
-                "mabhyt"    => $_POST['MaBHYT'] ?? '',
-                "sodt"      => $_POST['SoDTBN'] ?? '',
-                "diachi"    => $_POST['DiaChiBN'] ?? '',
-                "gioitinh"  => $_POST['GioiTinhBN'] ?? ''
+                "email"     => $_POST['email'] ?? '',
+                "password"  => $_POST['password'] ?? '',
+                "hoTen"     => $_POST['hoTen'] ?? '',
+                "ngaySinh"  => $_POST['ngaySinh'] ?? '',
+                "soDT"      => $_POST['soDT'] ?? '',
+                "gioiTinh"  => $_POST['gioiTinh'] ?? ''
             ];
 
             $userModel = new UserModel();

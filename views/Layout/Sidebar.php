@@ -34,6 +34,8 @@
       <?php if ($_SESSION['user']['sub'] === 'ADMIN'): ?>
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'bacsi' ? 'active' : '' ?>" 
            href="index.php?controller=bacsi&action=thempage">👨‍⚕️ Thêm bác sĩ</a>
+        <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'thongke' ? 'active' : '' ?>" 
+           href="index.php?controller=thongke&action=thongkepage">🔍 Thống Kê</a>
 
         <a class="list-group-item list-group-item-action <?= ($_GET['controller'] ?? '') === 'benhnhan' ? 'active' : '' ?>" 
            href="index.php?controller=benhnhan&action=timkiempage">🔍 Tra cứu bệnh nhân</a>

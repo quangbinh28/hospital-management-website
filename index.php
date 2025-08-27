@@ -100,6 +100,10 @@ switch ($controller) {
             $ctrl->xacNhanLich($_GET['maLich']);
         } elseif ($action === 'huylich' && isset($_GET['maLich'])) {
             $ctrl->huyLich($_GET['maLich']);
+        } elseif ($action === 'chidinhdichvupage'&& isset($_GET['maLich'])) {
+            $ctrl->chiDinhDichVuPage();
+        } elseif ($action === 'chidinhdichvu') {
+            $ctrl->chiDinhDichVu();
         } else {
             echo "❌ Không tìm thấy action [$action] trong LichKhamController";
         }
@@ -126,6 +130,8 @@ switch ($controller) {
             $ctrl->logout();
         } elseif ($action === 'registerpage') {
             $ctrl->registerPage();
+        } elseif ($action === 'register') {
+            $ctrl->handleRegister();
         }
         break;
     case 'thuoc':
@@ -134,6 +140,19 @@ switch ($controller) {
 
         if ($action === 'goiythuoc') {
             $ctrl->goiYThuoc();
+        } else {
+            echo "❌ Không tìm thấy action [$action] trong ThuocController";
+        }
+        break;
+
+    case 'thongke':
+        require_once 'controllers/ThongKeController.php';
+        $ctrl = new ThongKeController();
+
+        if ($action === 'thongkepage') {
+            $ctrl->thongKePage();
+        } elseif ($action === 'thongke') {
+            $ctrl->thongke();
         } else {
             echo "❌ Không tìm thấy action [$action] trong ThuocController";
         }

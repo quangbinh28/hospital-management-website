@@ -25,7 +25,7 @@ class UserModel {
 
         $data = json_decode($response, true);
 
-        if ($data['accessToken'] != '') {
+        if ($data['accessToken'] !== '') {
             // Giải mã JWT payload
             $payload = $this->decodeJwt($data['accessToken']);
 
@@ -45,7 +45,7 @@ class UserModel {
 
         $_SESSION['IsLogined'] = false;
     
-        echo "<script> alert('Lỗi: {$result['error']}'); </script>";
+        echo "<script> alert('Thông tin đăng nhập không hợp lệ'); </script>";
         header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=auth&action=loginpage");
         return [
             "success" => false,
@@ -64,8 +64,9 @@ class UserModel {
     }
 
     public function handleRegister($data) {
-        $url = "http://localhost:8080/api/v1/auth/register";
+        $url = "http://localhost:8080/api/v1/register/create";
 
+        // Khởi tạo cURL
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -74,20 +75,33 @@ class UserModel {
         ]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
+        // Thực hiện request
         $response = curl_exec($ch);
 
+        // Kiểm tra lỗi cURL
         if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            curl_close($ch);
             return [
                 "success" => false,
-                "error" => curl_error($ch)
+                "error" => $error
             ];
         }
 
         curl_close($ch);
 
+        // Giải mã JSON trả về
         $result = json_decode($response, true);
 
-        if (isset($result['success']) && $result['success'] === true) {
+        if (!$result) {
+            return [
+                "success" => false,
+                "error" => "Không thể giải mã phản hồi từ API"
+            ];
+        }
+
+        // Kiểm tra kết quả từ API
+        if (isset($result['statusCode']) && $result['statusCode'] === "201") {
             return [
                 "success" => true,
                 "data" => $result
@@ -95,8 +109,9 @@ class UserModel {
         } else {
             return [
                 "success" => false,
-                "error" => $result['message'] ?? "Đăng ký thất bại"
+                "error" => $result['statusMessage'] ?? "Đăng ký thất bại"
             ];
         }
     }
+
 }

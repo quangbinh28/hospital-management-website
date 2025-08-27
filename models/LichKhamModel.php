@@ -1,35 +1,7 @@
 <?php
 class LichKhamModel {
-    private $lichKhamMau;
 
     public function __construct() {
-        // Dữ liệu mẫu (thay cho CSDL)
-        $this->lichKhamMau = [
-            [
-                'maLichKham' => 1,
-                'tenBenhNhan' => 'Nguyễn Văn A',
-                'ngayKham' => '2025-08-15',
-                'gioKham' => '08:00',
-                'bacSi' => 'BS. Trần Thị B',
-                'trangThai' => 'Chưa xác nhận'
-            ],
-            [
-                'maLichKham' => 2,
-                'tenBenhNhan' => 'Trần Văn C',
-                'ngayKham' => '2025-08-15',
-                'gioKham' => '09:00',
-                'bacSi' => 'BS. Lê Văn D',
-                'trangThai' => 'Chưa xác nhận'
-            ],
-            [
-                'maLichKham' => 3,
-                'tenBenhNhan' => 'Phạm Thị E',
-                'ngayKham' => '2025-08-16',
-                'gioKham' => '10:00',
-                'bacSi' => 'BS. Nguyễn Văn F',
-                'trangThai' => 'Chưa xác nhận'
-            ]
-        ];
     }
 
     public function layDanhSachChuyenKhoa() {
@@ -121,7 +93,7 @@ class LichKhamModel {
         }
     }
 
-    public function datLichKham($maBS, $ngay, $gio, $nguyenNhan, $maBN) {
+    public function datLichKham($maBS, $ngay, $gio, $nguyenNhan, $maBN, $phong) {
         $token = $_SESSION['accessToken'] ?? '';
 
         $url = "http://localhost:8080/api/v1/appointments/create";
@@ -130,7 +102,8 @@ class LichKhamModel {
             "maBenhNhan" => $maBN,
             "maBacSi"    => $maBS,
             "gioKham"    => $gio,
-            "ghiChu"     => $nguyenNhan
+            "ghiChu"     => $nguyenNhan,
+            "phong"     => $phong
         ];
 
         if ($_SESSION['user']['sub'] == 'BENHNHAN') {
@@ -139,7 +112,8 @@ class LichKhamModel {
                 "ngayKham"   => $ngay,
                 "maBacSi"    => $maBS,
                 "gioKham"    => $gio,
-                "ghiChu"     => $nguyenNhan
+                "ghiChu"     => $nguyenNhan,
+                "phong"     => $phong
             ];
         }
 
@@ -302,5 +276,85 @@ class LichKhamModel {
         ];
     }
 
+    public function layDanhSachDichVu() {
+        $url = "http://localhost:8080/api/v1/services/all";
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer {$token}",
+            "Accept: application/json"
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return ['error' => 'cURL Error: ' . curl_error($ch)];
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            $data = json_decode($response, true);
+            return $data ?: [];
+        } else {
+            return ['error' => "HTTP {$httpCode}: {$response}"];
+        }
+    }
+
+    public function chiDinhDichVu($maLichKham, $maDichVu, $phong, $ghiChu) {
+        $token = $_SESSION['accessToken'] ?? '';
+
+        $url = "http://localhost:8080/api/v1/service-designation/create";
+        $data = [
+            "maDichVu"   => $maDichVu,
+            "maLichKham" => $maLichKham,
+            "moTa"       => $ghiChu,
+            "soPhong"    => $phong
+        ];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "Authorization: Bearer {$token}",
+            "Accept: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            $err = curl_error($ch);
+            curl_close($ch);
+            return [
+                "status" => 0,
+                "error"  => $err
+            ];
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Giải mã JSON trả về
+        $respArray = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [
+                "status" => $httpCode,
+                "error"  => "JSON Decode Error: " . json_last_error_msg(),
+                "raw"    => $response
+            ];
+        }
+
+        return [
+            "status"   => $httpCode,
+            "response" => $respArray
+        ];
+    }
 
 }
