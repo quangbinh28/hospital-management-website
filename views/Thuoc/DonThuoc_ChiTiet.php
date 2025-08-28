@@ -6,7 +6,7 @@
         <div class="card-body">
             <p><strong>Mã đơn thuốc:</strong> <?= htmlspecialchars($maDT) ?></p>
             <p><strong>Mã bệnh nhân:</strong> <?= htmlspecialchars($donThuoc['maBenhNhan']) ?></p>
-            <p><strong>Mã bệnh nhân:</strong> <?= htmlspecialchars($donThuoc['maBacSi']) ?></p>
+            <p><strong>Mã bác sĩ:</strong> <?= htmlspecialchars($donThuoc['maBacSi']) ?></p>
             <p><strong>Ngày cấp:</strong> <?= htmlspecialchars($donThuoc['ngayCap']) ?></p>
             <p><strong>Tình trạng:</strong> <?= htmlspecialchars($donThuoc['tinhTrang']) ?></p>
         </div>
@@ -35,8 +35,16 @@
         </table>
     </div>
 
-    <!-- Nút quay lại -->
-    <div class="text-end">
+    <!-- Nút hành động -->
+    <div class="d-flex gap-2 mb-3">
         <a href="index.php?controller=donthuoc&action=tracuupage" class="btn btn-secondary">⬅ Quay lại</a>
+
+        <?php if (!empty($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'DUOCSI'): ?>
+            <a href="index.php?controller=donthuoc&action=sansang&maDT=<?= urlencode($maDT) ?>&status=sansang" 
+               class="btn btn-success">✅ Sẵn sàng</a>
+
+            <a href="index.php?controller=donthuoc&action=dalay&maDT=<?= urlencode($maDT) ?>&status=dalay" 
+               class="btn btn-warning">📦 Đã gửi</a>
+        <?php endif; ?>
     </div>
 </div>

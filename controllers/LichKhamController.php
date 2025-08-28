@@ -87,7 +87,6 @@ class LichKhamController {
     }
 
     public function datLichKham() {
-        // Lấy dữ liệu từ form (camelCase)
         $maBS       = $_POST['bacSi'] ?? '';
         $ngay       = $_POST['ngayKham'] ?? '';
         $gio        = $_POST['gioKham'] ?? '';

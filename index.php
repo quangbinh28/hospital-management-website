@@ -115,6 +115,12 @@ switch ($controller) {
             $ctrl->themPage();
         } elseif ($action === 'luu') {
             $ctrl->luu();
+        } elseif ($action === 'chitiet') {
+            $ctrl->chiTiet(); 
+        } elseif ($action === 'uploadavatarpage') {
+            $ctrl->uploadAvatarPage(); 
+        } elseif ($action === 'uploadavatar') {
+            $ctrl->uploadAvatar(); 
         } else {
             echo "❌ Không tìm thấy action [$action] trong BacSiController";
         }

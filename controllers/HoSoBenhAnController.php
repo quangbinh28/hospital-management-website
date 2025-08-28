@@ -39,12 +39,7 @@ class HoSoBenhAnController {
             'maBacSi'    => $_SESSION['user']['id'],
             'ngayKham'   => date('Y-m-d H:i:s'), // ✅ Thêm ngày khám
         ];
-
-        // Alert để debug dữ liệu gửi đi
-        echo "<script>
-            alert('Dữ liệu gửi đi: " . addslashes(json_encode($data, JSON_UNESCAPED_UNICODE)) . "');
-        </script>";
-
+        
         // Gọi API
         $result = $this->model->taoHoSo($data);
 

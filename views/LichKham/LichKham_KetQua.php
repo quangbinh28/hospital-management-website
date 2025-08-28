@@ -40,6 +40,11 @@
                                class="btn btn-sm btn-danger mb-1">❌ Hủy</a>
                         <?php endif; ?>
 
+                        <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BENHNHAN'): ?>
+                            <a href="index.php?controller=lichkham&action=huylich&maLich=<?= urlencode($lich['maLichKham']) ?>&status=huy" 
+                               class="btn btn-sm btn-danger mb-1">❌ Hủy</a>
+                        <?php endif; ?>
+
                         <?php if (isset($_SESSION['user']['sub']) && $_SESSION['user']['sub'] === 'BACSI'): ?>
                             <a href="index.php?controller=donthuoc&action=taoPage&maBN=<?= urlencode($lich['maBenhNhan'] ?? '') ?>" 
                                class="btn btn-sm btn-primary mb-1">Tạo đơn thuốc</a>

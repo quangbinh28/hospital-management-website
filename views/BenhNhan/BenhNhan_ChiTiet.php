@@ -28,7 +28,7 @@
         <?php foreach ($hoSoList as $hs): ?>
             <div class="card mb-3 shadow-sm">
                 <div class="card-header fw-bold">
-                    Mã HS: <?= htmlspecialchars($hs['MaHS']) ?>
+                    Mã HS: <?= htmlspecialchars($hs['maHoSo']) ?>
                 </div>
                 <div class="card-body">
                     <p><strong>Ngày khám:</strong> <?= htmlspecialchars($hs['ngayKham']) ?></p>

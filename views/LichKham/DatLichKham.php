@@ -32,6 +32,25 @@
             </select>
         </div>
 
+        <!-- Thông tin bác sĩ -->
+        <div id="thongTinBacSi" class="alert alert-info d-none">
+            <h6>👨‍⚕️ Thông tin bác sĩ</h6>
+
+            <!-- Avatar -->
+            <div class="mb-2">
+                <img id="tt-avatar" src="" alt="Avatar bác sĩ" 
+                     class="img-thumbnail rounded shadow-sm" style="max-height:150px;">
+            </div>
+
+            <p><strong>Họ tên:</strong> <span id="tt-hoTen"></span></p>
+            <p><strong>Ngày sinh:</strong> <span id="tt-ngaySinh"></span></p>
+            <p><strong>Chuyên khoa:</strong> <span id="tt-chuyenKhoa"></span></p>
+            <div>
+                <strong>Kinh nghiệm:</strong>
+                <ul id="tt-kinhNghiem"></ul>
+            </div>
+        </div>
+
         <!-- Ngày khám -->
         <div class="mb-3">
             <label for="ngayKham" class="form-label">Ngày khám</label>
@@ -96,6 +115,46 @@ chuyenKhoaSelect.addEventListener('change', function () {
 bacSiSelect.addEventListener('change', function () {
     let maBS = this.value;
 
+    // Reset hiển thị thông tin bác sĩ
+    document.getElementById('thongTinBacSi').classList.add('d-none');
+
+    if (!maBS) return;
+
+    // Lấy thông tin chi tiết bác sĩ
+    fetch('index.php?controller=bacsi&action=chitiet&maBS=' + maBS)
+        .then(res => res.json())
+        .then(data => {
+            if (data) {
+                document.getElementById('tt-hoTen').innerText = data.hoTen || '';
+                document.getElementById('tt-ngaySinh').innerText = data.ngaySinh || '';
+                document.getElementById('tt-chuyenKhoa').innerText = data.chuyenKhoa || '';
+
+                // Hiển thị avatar
+                if (data.avatar) {
+                    document.getElementById('tt-avatar').src = "http://localhost/udpt/" + data.avatar;
+                } else {
+                    document.getElementById('tt-avatar').src = "";
+                }
+
+                // Kinh nghiệm
+                const kinhNghiemList = document.getElementById('tt-kinhNghiem');
+                kinhNghiemList.innerHTML = '';
+                if (data.kinhNghiem && data.kinhNghiem.length > 0) {
+                    data.kinhNghiem.forEach(kn => {
+                        kinhNghiemList.innerHTML += `
+                            <li>
+                                <strong>${kn.benhVien}</strong> - ${kn.chuyenKhoa}<br>
+                                ${kn.viTri} (${kn.namBatDau} - ${kn.namKetThuc})
+                            </li>
+                        `;
+                    });
+                }
+
+                document.getElementById('thongTinBacSi').classList.remove('d-none');
+            }
+        });
+
+    // Lấy lịch làm việc của bác sĩ
     fetch('index.php?controller=lichkham&action=layCaKhamTheoBacSi&maBS=' + maBS)
         .then(res => res.json())
         .then(data => {
@@ -110,7 +169,6 @@ bacSiSelect.addEventListener('change', function () {
                 ngayKhamSelect.innerHTML += `<option value="${ngay}">${ngay}</option>`;
             });
 
-            // mapping giờ -> phòng
             const gioPhongMap = {};
 
             ngayKhamSelect.addEventListener('change', function () {
@@ -133,14 +191,13 @@ bacSiSelect.addEventListener('change', function () {
                         let value = `${hh}:${mm}`;
 
                         gioKhamSelect.innerHTML += `<option value="${value}">${value}</option>`;
-                        gioPhongMap[value] = ca.phong; // gắn phòng cho giờ này
+                        gioPhongMap[value] = ca.phong;
 
                         startDate.setMinutes(startDate.getMinutes() + 30);
                     }
                 });
             });
 
-            // Khi chọn giờ -> tự động hiển thị phòng
             gioKhamSelect.addEventListener('change', function () {
                 const gioChon = this.value;
                 phongInput.value = gioPhongMap[gioChon] || '';
