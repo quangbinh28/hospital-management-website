@@ -25,7 +25,8 @@ class UserModel {
 
         $data = json_decode($response, true);
 
-        if ($data['accessToken'] !== '') {
+        // ✅ Nếu đăng nhập thành công
+        if (!empty($data['accessToken'])) {
             // Giải mã JWT payload
             $payload = $this->decodeJwt($data['accessToken']);
 
@@ -34,23 +35,22 @@ class UserModel {
             $_SESSION['refreshToken'] = $data['refreshToken'];
             $_SESSION['user'] = $payload;
             $_SESSION['user']['sub']  = $payload['role'];
-            $_SESSION['IsLogined'] = true;
+            $_SESSION['IsLogined']    = true;
             $_SESSION['user']['ten']  = $data['username'];
-            $_SESSION['user']['id']  = $data['id'];
+            $_SESSION['user']['id']   = $data['id'];
 
-            // ✅ chuyển hướng sang trang mong muốn
+            // Chuyển hướng sang trang chủ
             header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=trangchu&action=trangchupage");
-            exit(); 
+            exit();
         }
 
+        // Nếu đăng nhập thất bại
         $_SESSION['IsLogined'] = false;
-    
-        echo "<script> alert('Thông tin đăng nhập không hợp lệ'); </script>";
-        header("Location: http://localhost/ProjectUDPT/Website/index.php?controller=auth&action=loginpage");
-        return [
-            "success" => false,
-            "error" => "Login failed"
-        ];
+        echo "<script>
+                alert('Thông tin đăng nhập không hợp lệ');
+                window.location.href = 'http://localhost/ProjectUDPT/Website/index.php?controller=auth&action=loginpage';
+            </script>";
+        exit();
     }
 
     private function decodeJwt($jwt) {

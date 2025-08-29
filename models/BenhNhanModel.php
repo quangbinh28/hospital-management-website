@@ -130,12 +130,4 @@ class BenhNhanModel {
 
         return $data ?: [];
     }
-
-
-    /**
-     * Thêm bệnh nhân
-     */
-    public function themBenhNhan($data) {
-        return [];
-    }
 }
